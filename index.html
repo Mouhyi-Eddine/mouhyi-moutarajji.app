@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mouhyi Moutarajji — Développeur Web Full Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F6F2; --surface:#FFFFFF; --surface2:#ECEDE7;
+  --ink:#1B2422; --ink-dim:#5C6663; --line:#DBDDD5;
+  --accent:#A8631B; --teal:#2C7B6E;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Source Serif 4', Georgia, serif;
+  font-size:17px; line-height:1.6;
+  overflow-x:hidden;
+}
+.mono{font-family:'JetBrains Mono', 'Courier New', monospace;}
+a{color:inherit; text-decoration:none;}
+::selection{background:var(--accent); color:#fff;}
+
+.wrap{max-width:760px; margin:0 auto; padding:0 28px;}
+
+/* --- Top bar --- */
+.topbar{
+  border-bottom:1px solid var(--line);
+  background:rgba(245,246,242,0.92); backdrop-filter:blur(6px);
+  position:sticky; top:0; z-index:10;
+}
+.topbar-inner{
+  max-width:760px; margin:0 auto; padding:14px 28px;
+  display:flex; align-items:center; gap:18px;
+}
+.topbar-name{font-weight:600; font-size:14.5px;}
+.topbar-nav{margin-left:auto; display:flex; align-items:center; gap:18px; font-size:13px;}
+.topbar-nav a{color:var(--ink-dim); border-bottom:1px solid transparent; padding-bottom:2px; transition:color .15s, border-color .15s;}
+.topbar-nav a:hover, .topbar-nav a:focus-visible{color:var(--accent); border-color:var(--accent);}
+.lang-switch{display:flex; gap:2px; font-family:'JetBrains Mono',monospace; font-size:12px; border:1px solid var(--line); border-radius:4px; overflow:hidden;}
+.lang-switch button{padding:5px 9px; background:none; border:none; color:var(--ink-dim); cursor:pointer;}
+.lang-switch button[aria-pressed="true"]{background:var(--ink); color:#fff;}
+.lang-switch button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px;}
+
+/* --- Hero --- */
+.hero{padding:64px 0 56px;}
+.hero-eyebrow{color:var(--teal); font-size:13px; letter-spacing:.02em;}
+h1{
+  font-size:clamp(32px,5.5vw,50px); font-weight:600; line-height:1.15;
+  margin:16px 0 20px; max-width:15ch;
+}
+.hero p.lede{color:var(--ink-dim); font-size:18px; max-width:56ch; margin-bottom:30px;}
+.cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+.btn{
+  font-family:'JetBrains Mono', monospace; font-size:13.5px;
+  padding:11px 18px; border-radius:3px; border:1px solid var(--line);
+  transition:border-color .15s, background .15s, color .15s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn.primary{background:var(--ink); color:#fff; border-color:var(--ink); font-weight:600;}
+.btn.primary:hover, .btn.primary:focus-visible{background:var(--accent); border-color:var(--accent);}
+.btn.ghost{color:var(--ink); background:var(--surface);}
+.btn.ghost:hover, .btn.ghost:focus-visible{border-color:var(--ink-dim);}
+
+/* --- Sections --- */
+section{padding:52px 0; border-top:1px solid var(--line);}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:26px;}
+.section-num{font-family:'JetBrains Mono',monospace; color:var(--ink-dim); font-size:13px;}
+h2{font-size:22px; font-weight:600;}
+p{color:#3E4744;}
+
+/* About */
+.about p{max-width:60ch; margin-bottom:14px;}
+.about strong{color:var(--ink); font-weight:600;}
+
+/* Skills */
+.skill-groups{display:flex; flex-direction:column; gap:20px;}
+.skill-group-label{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--ink-dim); margin-bottom:9px;}
+.tags{display:flex; flex-wrap:wrap; gap:8px;}
+.tag{
+  font-family:'JetBrains Mono',monospace; font-size:12.5px;
+  padding:5px 10px; border-radius:3px; background:var(--surface);
+  border:1px solid var(--line); color:var(--ink);
+}
+
+/* Timeline */
+.entry{padding:26px 0; border-top:1px solid var(--line);}
+.entry:first-child{border-top:none; padding-top:0;}
+.entry-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:8px;}
+.entry-title{font-weight:600; font-size:17px;}
+.entry-meta{color:var(--ink-dim); font-size:13.5px; font-family:'JetBrains Mono',monospace;}
+.entry p.ctx{margin:8px 0 12px; font-size:15.5px;}
+.entry ul{margin:0 0 14px 0; padding-left:0; list-style:none;}
+.entry li{position:relative; padding-left:18px; font-size:15px; color:#4A5350; margin-bottom:6px;}
+.entry li::before{content:"›"; position:absolute; left:0; color:var(--teal);}
+
+/* Education */
+.edu-item{display:flex; justify-content:space-between; gap:16px; padding:12px 0; border-top:1px solid var(--line); font-size:15.5px;}
+.edu-item:first-child{border-top:none;}
+.edu-item .date{color:var(--ink-dim); font-family:'JetBrains Mono',monospace; font-size:13px; white-space:nowrap;}
+
+/* Companies */
+.co-list{font-size:14.5px; color:var(--ink-dim); line-height:1.9;}
+.co-list b{color:var(--ink); font-weight:600;}
+
+/* Contact */
+.contact p{max-width:52ch; margin-bottom:22px;}
+.contact .cta-row{margin-bottom:0;}
+
+footer{padding:36px 0 48px; color:var(--ink-dim); font-size:13px; font-family:'JetBrains Mono',monospace;}
+
+/* Reveal */
+.reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease;}
+.reveal.in{opacity:1; transform:none;}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1; transform:none; transition:none;}
+  html{scroll-behavior:auto;}
+}
+@media (max-width:600px){
+  .topbar-nav a{display:none;}
+  .hero{padding:44px 0 40px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="topbar-name">Mouhyi Moutarajji</span>
+    <nav class="topbar-nav mono">
+      <a href="#about"><span class="i18n" data-fr="profil" data-en="profile">profil</span></a>
+      <a href="#skills"><span class="i18n" data-fr="compétences" data-en="skills">compétences</span></a>
+      <a href="#experience"><span class="i18n" data-fr="expériences" data-en="experience">expériences</span></a>
+      <a href="#contact"><span class="i18n" data-fr="contact" data-en="contact">contact</span></a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Langue / Language">
+      <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-eyebrow mono i18n" data-fr="Ingénieur logiciel — 8 ans d'expérience" data-en="Software engineer — 8 years of experience">Ingénieur logiciel — 8 ans d'expérience</div>
+    <h1 class="i18n" data-fr="Développeur Web Full Stack" data-en="Full Stack Web Developer">Développeur Web Full Stack</h1>
+    <p class="lede i18n" data-fr="Java / Angular. Ingénieur logiciel pour la RATP, la CNAF, SNCF, VINCI et d'autres, avec un fil rouge : faire évoluer des applications existantes sans casser ce qui marche." data-en="Java / Angular. Software engineer for RATP, CNAF, SNCF, VINCI and others, with one recurring thread: evolving existing applications without breaking what already works.">Java / Angular. Ingénieur logiciel pour la RATP, la CNAF, SNCF, VINCI et d'autres, avec un fil rouge : faire évoluer des applications existantes sans casser ce qui marche.</p>
+    <div class="cta-row">
+      <a class="btn primary i18n" href="#experience" data-fr="Voir mes expériences" data-en="View my experience">Voir mes expériences</a>
+      <a class="btn ghost mono i18n" href="#contact" data-fr="Me contacter" data-en="Contact me">Me contacter</a>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="section-head"><span class="section-num mono">01</span><h2 class="i18n" data-fr="Profil" data-en="Profile">Profil</h2></div>
+    <p><span class="i18n" data-fr="Ingénieur en informatique avec " data-en="Computer engineer with ">Ingénieur en informatique avec </span><strong class="i18n" data-fr="8 ans d'expérience" data-en="8 years of experience">8 ans d'expérience</strong><span class="i18n" data-fr=" dans le secteur, j'ai acquis une expertise solide dans plusieurs domaines, notamment le développement logiciel et la gestion de projets." data-en=" in the industry, I have built solid expertise across several areas, notably software development and project management."> dans le secteur, j'ai acquis une expertise solide dans plusieurs domaines, notamment le développement logiciel et la gestion de projets.</span></p>
+    <p class="i18n" data-fr="Passionné par les technologies émergentes et l'innovation, je maintiens une veille active afin de rester à la pointe des évolutions du secteur." data-en="Passionate about emerging technologies and innovation, I keep an active watch to stay at the forefront of developments in the field.">Passionné par les technologies émergentes et l'innovation, je maintiens une veille active afin de rester à la pointe des évolutions du secteur.</p>
+    <p class="i18n" data-fr="Animé par un fort esprit d'apprentissage et d'amélioration continue, je suis motivé par les défis techniques et les opportunités de croissance professionnelle." data-en="Driven by a strong desire to keep learning and improving, I'm motivated by technical challenges and opportunities for professional growth.">Animé par un fort esprit d'apprentissage et d'amélioration continue, je suis motivé par les défis techniques et les opportunités de croissance professionnelle.</p>
+  </section>
+
+  <section id="skills">
+    <div class="section-head"><span class="section-num mono">02</span><h2 class="i18n" data-fr="Compétences techniques" data-en="Technical skills">Compétences techniques</h2></div>
+    <div class="skill-groups">
+      <div>
+        <div class="skill-group-label i18n" data-fr="BACK-END" data-en="BACK-END">BACK-END</div>
+        <div class="tags">
+          <span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Spring Security</span>
+          <span class="tag">Node.js</span><span class="tag">NestJS</span><span class="tag">Python</span>
+          <span class="tag">Kotlin</span><span class="tag">REST API's</span><span class="tag">WebSocket</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label i18n" data-fr="FRONT-END" data-en="FRONT-END">FRONT-END</div>
+        <div class="tags">
+          <span class="tag">Angular</span><span class="tag">React.js</span><span class="tag">TypeScript</span>
+          <span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">jQuery</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label i18n" data-fr="DONNÉES & INFRA" data-en="DATA & INFRA">DONNÉES & INFRA</div>
+        <div class="tags">
+          <span class="tag">PostgreSQL</span><span class="tag">SQL</span><span class="tag">Docker</span>
+          <span class="tag">GitLab CI</span><span class="tag">Jenkins</span><span class="tag">RabbitMQ</span><span class="tag">Keycloak</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label i18n" data-fr="MÉTHODES & OUTILS" data-en="METHODS & TOOLS">MÉTHODES & OUTILS</div>
+        <div class="tags">
+          <span class="tag">Scrum</span><span class="tag">Agile</span><span class="tag">TDD</span><span class="tag">User Stories</span>
+          <span class="tag">Product Ownership</span><span class="tag">GitLab</span><span class="tag">SonarQube</span><span class="tag">Bruno</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-label i18n" data-fr="LANGUES" data-en="LANGUAGES">LANGUES</div>
+        <div class="tags">
+          <span class="tag i18n" data-fr="Arabe — natif" data-en="Arabic — native">Arabe — natif</span>
+          <span class="tag i18n" data-fr="Français — natif" data-en="French — native">Français — natif</span>
+          <span class="tag i18n" data-fr="Anglais — courant" data-en="English — fluent">Anglais — courant</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="section-head"><span class="section-num mono">03</span><h2 class="i18n" data-fr="Expériences Professionnelles" data-en="Professional Experience">Expériences Professionnelles</h2></div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">RATP — <span class="i18n" data-fr="Ingénieur logiciel" data-en="Software Engineer">Ingénieur logiciel</span></span>
+        <span class="entry-meta">02/2026 – 08/2026 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Modernisation d'une application de supervision et gestion des équipements de vidéosurveillance." data-en="Modernization of a supervision and management application for video-surveillance equipment.">Modernisation d'une application de supervision et gestion des équipements de vidéosurveillance.</p>
+      <ul>
+        <li class="i18n" data-fr="Migration Back-End Java 8 → Java 21, Front-End AngularJS → Angular 19" data-en="Back-end migration Java 8 → Java 21, front-end AngularJS → Angular 19">Migration Back-End Java 8 → Java 21, Front-End AngularJS → Angular 19</li>
+        <li class="i18n" data-fr="Conception de nouvelles IHM et refonte complète des fonctionnalités existantes" data-en="Design of new UI screens and full rebuild of existing features">Conception de nouvelles IHM et refonte complète des fonctionnalités existantes</li>
+        <li class="i18n" data-fr="Automatisation des tests API avec Bruno, amélioration de la couverture de tests" data-en="API test automation with Bruno, improved test coverage">Automatisation des tests API avec Bruno, amélioration de la couverture de tests</li>
+      </ul>
+      <div class="tags"><span class="tag">Angular</span><span class="tag">Bruno</span><span class="tag">Git</span><span class="tag">Java</span><span class="tag">REST API's</span><span class="tag">Scrum</span><span class="tag">Spring Boot</span><span class="tag">TypeScript</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">CNAF — <span class="i18n" data-fr="Ingénieur logiciel" data-en="Software Engineer">Ingénieur logiciel</span></span>
+        <span class="entry-meta">06/2025 – 02/2026 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Téléprocédures du portail caf.fr : déclarations de situation, prime d'activité, RSA." data-en="Online procedures for the caf.fr portal: status declarations, activity bonus, RSA benefit.">Téléprocédures du portail caf.fr : déclarations de situation, prime d'activité, RSA.</p>
+      <ul>
+        <li class="i18n" data-fr="Développement front Angular 17/19 sur plusieurs téléprocédures (AJPA, DPA, DPN, DPF)" data-en="Angular 17/19 front-end development across several online procedures (AJPA, DPA, DPN, DPF)">Développement front Angular 17/19 sur plusieurs téléprocédures (AJPA, DPA, DPN, DPF)</li>
+        <li class="i18n" data-fr="Nouveaux endpoints Java/Spring Boot, correction d'anomalies et stabilisation" data-en="New Java/Spring Boot endpoints, bug fixing and stabilization">Nouveaux endpoints Java/Spring Boot, correction d'anomalies et stabilisation</li>
+        <li class="i18n" data-fr="Formation et actions d'amélioration de l'accessibilité numérique" data-en="Training and digital accessibility improvement work">Formation et actions d'amélioration de l'accessibilité numérique</li>
+      </ul>
+      <div class="tags"><span class="tag">Angular</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">JavaScript</span><span class="tag">Jenkins</span><span class="tag">PostgreSQL</span><span class="tag">Scrum</span><span class="tag">Spring Boot</span><span class="tag">SQL</span><span class="tag">TypeScript</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">EmerGa — <span class="i18n" data-fr="Développeur Fullstack" data-en="Fullstack Developer">Développeur Fullstack</span></span>
+        <span class="entry-meta">08/2024 – 06/2025 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="EmerGa / SINAPSE : solutions d'aide aux témoins de situations de secours." data-en="EmerGa / SINAPSE: solutions helping bystanders in emergency situations.">EmerGa / SINAPSE : solutions d'aide aux témoins de situations de secours.</p>
+      <ul>
+        <li class="i18n" data-fr="Nouvelles fonctionnalités front en React et endpoints API associés" data-en="New React front-end features and related API endpoints">Nouvelles fonctionnalités front en React et endpoints API associés</li>
+        <li class="i18n" data-fr="WebSocket temps réel entre les deux applications (EmerGa ↔ Sinapse)" data-en="Real-time WebSocket link between both applications (EmerGa ↔ Sinapse)">WebSocket temps réel entre les deux applications (EmerGa ↔ Sinapse)</li>
+        <li class="i18n" data-fr="Migrations PostgreSQL et réorganisation de l'architecture React" data-en="PostgreSQL migrations and React architecture reorganization">Migrations PostgreSQL et réorganisation de l'architecture React</li>
+      </ul>
+      <div class="tags"><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">React.js</span><span class="tag">REST API's</span><span class="tag">Scrum</span><span class="tag">TypeScript</span><span class="tag">WebSocket</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">GROUPE MAUGIN — <span class="i18n" data-fr="Développeur FullStack" data-en="Fullstack Developer">Développeur FullStack</span></span>
+        <span class="entry-meta">07/2023 – 08/2024 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Menuiserie industrielle — nouvelles fonctionnalités sur un logiciel métier existant." data-en="Industrial joinery — new features on an existing in-house business application.">Menuiserie industrielle — nouvelles fonctionnalités sur un logiciel métier existant.</p>
+      <ul>
+        <li class="i18n" data-fr="Migration de version des frameworks, nouvelles pages Angular" data-en="Framework version migration, new Angular pages">Migration de version des frameworks, nouvelles pages Angular</li>
+        <li class="i18n" data-fr="Création de nouveaux endpoints API en NestJS" data-en="Creation of new NestJS API endpoints">Création de nouveaux endpoints API en NestJS</li>
+        <li class="i18n" data-fr="Livraison, tests unitaires et suivi jusqu'en production" data-en="Delivery, unit testing and follow-through to production">Livraison, tests unitaires et suivi jusqu'en production</li>
+      </ul>
+      <div class="tags"><span class="tag">Angular</span><span class="tag">Docker</span><span class="tag">GitLab</span><span class="tag">JavaScript</span><span class="tag">NestJS</span><span class="tag">Ngzorro</span><span class="tag">PostgreSQL</span><span class="tag">Scrum</span><span class="tag">TypeScript</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">SNCF — <span class="i18n" data-fr="Développeur" data-en="Developer">Développeur</span></span>
+        <span class="entry-meta">01/2023 – 06/2023 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Outil de modélisation des schémas d'alimentation électrique pour voies secondaires." data-en="Modeling tool for electrical supply diagrams on secondary railway tracks.">Outil de modélisation des schémas d'alimentation électrique pour voies secondaires.</p>
+      <ul>
+        <li class="i18n" data-fr="Interface graphique de modélisation de schémas avec la librairie JointJS" data-en="Graphical diagram modeling interface built with the JointJS library">Interface graphique de modélisation de schémas avec la librairie JointJS</li>
+        <li class="i18n" data-fr="Export/import CSV, algorithme de parcours et règles de calcul" data-en="CSV export/import, traversal algorithm and calculation rules">Export/import CSV, algorithme de parcours et règles de calcul</li>
+        <li class="i18n" data-fr="Déploiement d'une application Windows avec Electron" data-en="Deployment of a Windows application with Electron">Déploiement d'une application Windows avec Electron</li>
+      </ul>
+      <div class="tags"><span class="tag">Angular</span><span class="tag">Electron</span><span class="tag">GitLab</span><span class="tag">JointJS</span><span class="tag">TypeScript</span><span class="tag">User Stories</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">VINCI — <span class="i18n" data-fr="Développeur Full Stack" data-en="Full Stack Developer">Développeur Full Stack</span></span>
+        <span class="entry-meta">01/2021 – 12/2022 · Le Mans</span>
+      </div>
+      <p class="ctx i18n" data-fr="Application « Académie » — front-office et back-office de formations internes." data-en="“Académie” application — front-office and back-office for internal training courses.">Application « Académie » — front-office et back-office de formations internes.</p>
+      <ul>
+        <li class="i18n" data-fr="Refonte Java 8 → Java 17, API sécurisées Spring Boot / Spring Security" data-en="Rebuild Java 8 → Java 17, secured APIs with Spring Boot / Spring Security">Refonte Java 8 → Java 17, API sécurisées Spring Boot / Spring Security</li>
+        <li class="i18n" data-fr="Refonte du front et de l'IHM, montée de version de plusieurs technos" data-en="Front-end and UI rebuild, version upgrades across several technologies">Refonte du front et de l'IHM, montée de version de plusieurs technos</li>
+        <li class="i18n" data-fr="Refactorisation backend et correction de bugs en production" data-en="Backend refactoring and production bug fixes">Refactorisation backend et correction de bugs en production</li>
+      </ul>
+      <div class="tags"><span class="tag">Apache Struts</span><span class="tag">CSS</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">Hibernate</span><span class="tag">HTML</span><span class="tag">Java</span><span class="tag">JavaScript</span><span class="tag">jQuery</span><span class="tag">PostgreSQL</span><span class="tag">REST API's</span><span class="tag">Spring Boot</span><span class="tag">Spring Security</span><span class="tag">TypeScript</span><span class="tag">V-Model</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">Net-ng — <span class="i18n" data-fr="Développeur FullStack" data-en="Fullstack Developer">Développeur FullStack</span></span>
+        <span class="entry-meta">09/2020 – 11/2020 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Acoshop — application web d'achats et de devis pour les sous-traitants d'Acorus." data-en="Acoshop — purchasing and quotation web application for Acorus subcontractors.">Acoshop — application web d'achats et de devis pour les sous-traitants d'Acorus.</p>
+      <ul>
+        <li class="i18n" data-fr="Génération de devis, bons d'achat et export PDF envoyé par mail" data-en="Quote and purchase order generation, PDF export sent by email">Génération de devis, bons d'achat et export PDF envoyé par mail</li>
+        <li class="i18n" data-fr="Gestion des brouillons de panier et duplication d'intentions d'achat" data-en="Cart draft management and duplication of purchase intents">Gestion des brouillons de panier et duplication d'intentions d'achat</li>
+        <li class="i18n" data-fr="Correction de bugs, dont un problème d'authentification mobile" data-en="Bug fixes, including a mobile authentication issue">Correction de bugs, dont un problème d'authentification mobile</li>
+      </ul>
+      <div class="tags"><span class="tag">CSS</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">GitLab CI</span><span class="tag">HTML</span><span class="tag">Nagare</span><span class="tag">PostgreSQL</span><span class="tag">Python</span><span class="tag">Scrum</span><span class="tag">SQLAlchemy</span><span class="tag i18n" data-fr="application web" data-en="web application">application web</span></div>
+    </div>
+
+    <div class="entry reveal">
+      <div class="entry-head">
+        <span class="entry-title">Net-ng — <span class="i18n" data-fr="Développeur FullStack" data-en="Fullstack Developer">Développeur FullStack</span></span>
+        <span class="entry-meta">10/2019 – 09/2020 · Rennes</span>
+      </div>
+      <p class="ctx i18n" data-fr="Outils de recherche et de contrôle qualité de sites web pour Solocal." data-en="Search and quality-control tools for websites, for Solocal.">Outils de recherche et de contrôle qualité de sites web pour Solocal.</p>
+      <ul>
+        <li class="i18n" data-fr="Développement d'une API RESTful et de plusieurs services en Python" data-en="Development of a RESTful API and several Python services">Développement d'une API RESTful et de plusieurs services en Python</li>
+        <li class="i18n" data-fr="Gestion des authentifications et des accès utilisateurs" data-en="Management of user authentication and access control">Gestion des authentifications et des accès utilisateurs</li>
+        <li class="i18n" data-fr="Plateforme web développée en Nagare, revue de code et refactoring" data-en="Web platform built with Nagare, code review and refactoring">Plateforme web développée en Nagare, revue de code et refactoring</li>
+      </ul>
+      <div class="tags"><span class="tag">CSS</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">GitLab CI</span><span class="tag">HTML</span><span class="tag">Nagare</span><span class="tag">PostgreSQL</span><span class="tag">Python</span><span class="tag">RabbitMQ</span><span class="tag">REST API's</span><span class="tag">Scrum</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><span class="section-num mono">04</span><h2 class="i18n" data-fr="Formation" data-en="Education">Formation</h2></div>
+    <div class="edu-item"><span class="i18n" data-fr="Master 2 — Ingénierie logicielle, Université de Rennes" data-en="Master's degree — Software Engineering, University of Rennes">Master 2 — Ingénierie logicielle, Université de Rennes</span><span class="date mono">10/2019</span></div>
+    <div class="edu-item"><span class="i18n" data-fr="Master 1 — Ingénierie logicielle, Université de Rennes" data-en="Master 1 — Software Engineering, University of Rennes">Master 1 — Ingénierie logicielle, Université de Rennes</span><span class="date mono">09/2018</span></div>
+    <div class="edu-item"><span class="i18n" data-fr="Licence — Ingénierie informatique, Université de Rennes" data-en="Bachelor's degree — Computer Engineering, University of Rennes">Licence — Ingénierie informatique, Université de Rennes</span><span class="date mono">12/2017</span></div>
+  </section>
+
+  <section>
+    <div class="section-head"><span class="section-num mono">05</span><h2 class="i18n" data-fr="Sociétés de conseil" data-en="Consulting agencies">Sociétés de conseil</h2></div>
+    <div class="co-list">
+      <div><b>OPEN</b> — <span class="i18n" data-fr="Concepteur Développeur Senior" data-en="Senior Software Designer/Developer">Concepteur Développeur Senior</span> · <span class="i18n" data-fr="depuis 09/2026" data-en="since 09/2026">depuis 09/2026</span></div>
+      <div><b>SOGETI</b> — <span class="i18n" data-fr="Ingénieur logiciel" data-en="Software Engineer">Ingénieur logiciel</span> · 06/2025 – 08/2026</div>
+      <div><b>EXTIA</b> — <span class="i18n" data-fr="Ingénieur logiciel" data-en="Software Engineer">Ingénieur logiciel</span> · 10/2019 – 05/2025</div>
+      <div><b><span class="i18n" data-fr="Rectorat de l'académie de Rennes" data-en="Rectorat of the Rennes academic district">Rectorat de l'académie de Rennes</span></b> — <span class="i18n" data-fr="Développeur fullstack" data-en="Fullstack Developer">Développeur fullstack</span> · 09/2018 – 11/2019</div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="section-head"><span class="section-num mono">06</span><h2 class="i18n" data-fr="Contact" data-en="Contact">Contact</h2></div>
+    <p class="i18n" data-fr="Disponible pour discuter d'une mission, d'un poste ou simplement échanger sur un sujet technique." data-en="Available to discuss an assignment, a position, or simply to talk about a technical topic.">Disponible pour discuter d'une mission, d'un poste ou simplement échanger sur un sujet technique.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="https://www.linkedin.com/in/mouhyi-moutarajji-47801814b" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost mono" href="mailto:moutarajji.mouhyi@gmail.com">moutarajji.mouhyi@gmail.com</a>
+    </div>
+  </section>
+
+  <footer class="mono">
+    Mouhyi Moutarajji — Rennes, France
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12});
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  var i18nEls = document.querySelectorAll('.i18n');
+  var buttons = document.querySelectorAll('.lang-switch button');
+  function setLang(lang){
+    i18nEls.forEach(function(el){
+      var val = el.getAttribute('data-' + lang);
+      if(val !== null){ el.textContent = val; }
+    });
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false'); });
+    document.documentElement.lang = lang;
+  }
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+  });
+})();
+</script>
+</body>
+</html>
