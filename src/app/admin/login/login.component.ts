@@ -3,7 +3,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Meta } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AdminAuthService } from '../admin-auth.service';
-import { ADMIN_PATH } from '../admin-path';
+import { AdminPath } from '../admin-path';
 
 @Component({
   selector: 'app-admin-login',
@@ -35,6 +35,7 @@ import { ADMIN_PATH } from '../admin-path';
 export class LoginComponent {
   private readonly auth = inject(AdminAuthService);
   private readonly router = inject(Router);
+  private readonly path = inject(AdminPath);
 
   readonly form = inject(NonNullableFormBuilder).group({
     email: ['', [Validators.required, Validators.email]],
@@ -46,7 +47,7 @@ export class LoginComponent {
   constructor() {
     inject(Meta).updateTag({ name: 'robots', content: 'noindex, nofollow' });
     // Session déjà active : pas besoin de se reconnecter.
-    void this.auth.whenReady().then((user) => user && this.router.navigate(['/', ADMIN_PATH]));
+    void this.auth.whenReady().then((user) => user && this.router.navigate(this.path.url()));
   }
 
   async submit(): Promise<void> {
@@ -56,7 +57,7 @@ export class LoginComponent {
     try {
       const { email, password } = this.form.getRawValue();
       await this.auth.login(email, password);
-      await this.router.navigate(['/', ADMIN_PATH]);
+      await this.router.navigate(this.path.url());
     } catch {
       // Message volontairement générique : ne pas révéler si l'e-mail existe.
       this.error.set('Identifiants invalides.');

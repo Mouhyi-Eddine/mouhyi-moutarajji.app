@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
+import { PortfolioDataService } from '../../core/portfolio-data.service';
 
 @Component({
   selector: 'app-hero',
@@ -8,7 +9,7 @@ import { I18nService } from '../../core/i18n.service';
   template: `
     <section class="hero" id="top">
       <div class="wrap">
-        <p class="kicker">{{ i18n.t('hero.kicker') }}</p>
+        <p class="kicker">{{ i18n.t('hero.kicker', { years: data.yearsOfExperience() }) }}</p>
         <h1>{{ i18n.t('hero.title') }}</h1>
         <p class="lead">{{ i18n.t('hero.lead') }}</p>
         <div class="cta-row">
@@ -18,7 +19,7 @@ import { I18nService } from '../../core/i18n.service';
 
         <div class="schema" aria-hidden="true">
           <svg viewBox="0 0 860 140" preserveAspectRatio="xMidYMid meet">
-            <path class="schema-path" d="M20,100 L120,100 L160,50 L260,50 L300,110 L420,110 L460,40 L560,40 L600,90 L700,90 L740,60 L840,60"/>
+            <path class="schema-path" pathLength="1" d="M20,100 L120,100 L160,50 L260,50 L300,110 L420,110 L460,40 L560,40 L600,90 L700,90 L740,60 L840,60"/>
             <g>
               <circle class="schema-dot" cx="20" cy="100" r="4" style="animation-delay:.4s"/>
               <circle class="schema-dot" cx="160" cy="50" r="4" style="animation-delay:.7s"/>
@@ -40,5 +41,5 @@ import { I18nService } from '../../core/i18n.service';
   `,
 })
 export class HeroComponent {
-  constructor(readonly i18n: I18nService) {}
+  constructor(readonly i18n: I18nService, readonly data: PortfolioDataService) {}
 }

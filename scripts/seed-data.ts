@@ -62,7 +62,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
 
 export const EXPERIENCES: Experience[] = [
   {
-    id: 'open', company: 'OPEN', order: 10, location: 'Rennes', period: 'Depuis 09/2026 · En cours',
+    id: 'open', company: 'OPEN', order: 10, location: 'Rennes', start: '2026-09', end: null,
     roleFr: 'Concepteur Développeur Senior', roleEn: 'Senior Software Engineer',
     contextFr: "Mission en cours de conception et de développement logiciel au sein d'OPEN.",
     contextEn: 'Current software design and development assignment at OPEN.',
@@ -70,7 +70,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Java', 'Angular', 'Git'],
   },
   {
-    id: 'ratp', company: 'RATP', order: 9, location: 'Rennes', period: '02/2026 – 08/2026 · 7 mois',
+    id: 'ratp', company: 'RATP', order: 9, location: 'Rennes', start: '2026-02', end: '2026-08',
     roleFr: 'Ingénieur logiciel', roleEn: 'Software engineer',
     contextFr: "Modernisation d'une application de supervision et de gestion des équipements de vidéosurveillance : consultation, configuration et administration des caméras déployées sur les stations de métro, gestion des demandes d'installation et de paramétrage.",
     contextEn: 'Modernization of a monitoring and management application for CCTV equipment: viewing, configuring and administering cameras deployed across metro stations, managing installation and configuration requests.',
@@ -103,7 +103,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Angular', 'Bruno', 'Git', 'Java', 'REST APIs', 'Scrum', 'Spring Boot', 'TypeScript'],
   },
   {
-    id: 'cnaf', company: 'CNAF', order: 8, location: 'Rennes', period: '06/2025 – 02/2026 · 9 mois',
+    id: 'cnaf', company: 'CNAF', order: 8, location: 'Rennes', start: '2025-06', end: '2026-02',
     roleFr: 'Ingénieur logiciel', roleEn: 'Software engineer',
     contextFr: "Téléprocédures du portail caf.fr (France Travail, lutte contre le non-droit) : déclarations de situation, prime d'activité, RSA, coordonnées bancaires.",
     contextEn: 'Online procedures on the caf.fr portal (France Travail, tackling non-take-up of benefits): situation declarations, activity bonus, RSA benefits, bank details.',
@@ -128,7 +128,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Angular', 'Git', 'GitLab', 'JavaScript', 'Jenkins', 'PostgreSQL', 'Scrum', 'Spring Boot', 'SQL', 'TypeScript'],
   },
   {
-    id: 'emerga', company: 'EmerGa', order: 7, location: 'Rennes', period: '08/2024 – 06/2025 · 11 mois',
+    id: 'emerga', company: 'EmerGa', order: 7, location: 'Rennes', start: '2024-08', end: '2025-06',
     roleFr: 'Développeur Fullstack', roleEn: 'Fullstack Developer',
     contextFr: "EmerGa / SINAPSE : solutions conçues pour s'intégrer à l'action de secours et aider les témoins de situations de crise.",
     contextEn: 'EmerGa / SINAPSE: solutions designed to support emergency response and help bystanders in crisis situations.',
@@ -151,7 +151,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Docker', 'Git', 'GitLab', 'Node.js', 'PostgreSQL', 'React.js', 'REST APIs', 'Scrum', 'TypeScript', 'WebSocket'],
   },
   {
-    id: 'maugin', company: 'GROUPE MAUGIN', order: 6, location: 'Rennes', period: '07/2023 – 08/2024 · 1 an 2 mois',
+    id: 'maugin', company: 'GROUPE MAUGIN', order: 6, location: 'Rennes', start: '2023-07', end: '2024-08',
     roleFr: 'Développeur FullStack', roleEn: 'Fullstack Developer',
     contextFr: 'Menuiserie industrielle (3 usines, ~300 collaborateurs) : mise en place de nouvelles fonctionnalités sur le logiciel métier existant.',
     contextEn: 'Industrial joinery company (3 factories, ~300 employees): building new features on top of the existing business software.',
@@ -174,7 +174,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Angular', 'Docker', 'GitLab', 'JavaScript', 'NestJS', 'NG-ZORRO', 'PostgreSQL', 'Scrum', 'TypeScript'],
   },
   {
-    id: 'sncf', company: 'SNCF', order: 5, location: 'Rennes', period: '01/2023 – 06/2023 · 6 mois',
+    id: 'sncf', company: 'SNCF', order: 5, location: 'Rennes', start: '2023-01', end: '2023-06',
     roleFr: 'Développeur', roleEn: 'Developer',
     contextFr: 'Outil de modélisation des schémas d\'alimentation électrique pour voies secondaires, avec exigence de rigueur sur la lecture du schéma et la cohérence des résultats.',
     contextEn: 'Modeling tool for electrical supply diagrams on secondary tracks, requiring strict accuracy in diagram reading and result consistency.',
@@ -199,7 +199,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Angular', 'Electron', 'GitLab', 'JointJS', 'TypeScript', 'User Stories'],
   },
   {
-    id: 'vinci', company: 'VINCI', order: 4, location: 'Le Mans', period: '01/2021 – 12/2022 · 2 ans',
+    id: 'vinci', company: 'VINCI', order: 4, location: 'Le Mans', start: '2021-01', end: '2022-12',
     roleFr: 'Développeur Full Stack', roleEn: 'Full Stack Developer',
     contextFr: 'Application « Académie » — front-office et back-office permettant aux collaborateurs de postuler à des formations internes et externes, au sein d\'une équipe de 4 personnes.',
     contextEn: '"Académie" application — front-office and back-office allowing employees to apply for internal and external training, within a 4-person team.',
@@ -220,7 +220,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['Apache Struts', 'CSS', 'Git', 'GitLab', 'Hibernate', 'HTML', 'Java', 'JavaScript', 'jQuery', 'PostgreSQL', 'REST APIs', 'Spring Boot', 'Spring Security', 'TypeScript', 'V-Model'],
   },
   {
-    id: 'netng-acoshop', company: 'Net-ng — Acoshop', order: 3, location: 'Rennes', period: '09/2020 – 11/2020 · 3 mois',
+    id: 'netng-acoshop', company: 'Net-ng — Acoshop', order: 3, location: 'Rennes', start: '2020-09', end: '2020-11',
     roleFr: 'Développeur FullStack', roleEn: 'Fullstack Developer',
     contextFr: "Acoshop, application web d'achats et de devis pour les sous-traitants d'Acorus, avec gestion des stocks fournisseurs.",
     contextEn: 'Acoshop, a web application for purchases and quotes for Acorus subcontractors, including supplier stock management.',
@@ -241,7 +241,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['CSS', 'Git', 'GitLab', 'GitLab CI', 'HTML', 'Nagare', 'PostgreSQL', 'Python', 'Scrum', 'SQLAlchemy'],
   },
   {
-    id: 'netng-solocal', company: 'Net-ng — Solocal', order: 2, location: 'Rennes', period: '10/2019 – 09/2020 · 1 an',
+    id: 'netng-solocal', company: 'Net-ng — Solocal', order: 2, location: 'Rennes', start: '2019-10', end: '2020-09',
     roleFr: 'Développeur FullStack', roleEn: 'Fullstack Developer',
     contextFr: 'Outils de recherche de sites réalisés par Solocal et de contrôle qualité, avec notation automatique sur 100 pour évaluer l\'état des sites.',
     contextEn: 'Search and quality-control tools for websites built by Solocal, with an automatic score out of 100 to assess site health.',
@@ -258,7 +258,7 @@ export const EXPERIENCES: Experience[] = [
     tags: ['CSS', 'Docker', 'Git', 'GitLab', 'GitLab CI', 'HTML', 'Nagare', 'PostgreSQL', 'Python', 'RabbitMQ', 'REST APIs', 'Scrum'],
   },
   {
-    id: 'rectorat', company: 'Rectorat de l\'académie de Rennes', order: 1, location: 'Rennes', period: '09/2018 – 11/2019 · 1 an 3 mois',
+    id: 'rectorat', company: 'Rectorat de l\'académie de Rennes', order: 1, location: 'Rennes', start: '2018-09', end: '2019-11',
     roleFr: 'Développeur fullstack', roleEn: 'Fullstack Developer',
     contextFr: 'Outil dynamique permettant aux chefs d\'établissement (collèges, lycées) d\'accéder à la documentation et de la modifier sur les pages web des applications métier, sans solliciter les développeurs. Équipe agile de 2 développeurs et un Product Owner.',
     contextEn: 'Dynamic tool allowing school administrators (middle and high schools) to access and edit documentation on business application web pages without needing a developer. Agile team of 2 developers and a Product Owner.',
@@ -287,8 +287,8 @@ export const EDUCATION: Education[] = [
 ];
 
 export const AGENCIES: Agency[] = [
-  { id: 'open-agency', name: 'OPEN', roleFr: 'Concepteur Développeur Senior', roleEn: 'Senior Developer / Designer', date: 'depuis 09/2026', order: 4 },
-  { id: 'sogeti', name: 'SOGETI', roleFr: 'Ingénieur logiciel', roleEn: 'Software Engineer', date: '06/2025 – 08/2026', order: 3 },
-  { id: 'extia', name: 'EXTIA', roleFr: 'Ingénieur logiciel', roleEn: 'Software Engineer', date: '10/2019 – 05/2025', order: 2 },
-  { id: 'rectorat-agency', name: "Rectorat de l'académie de Rennes", roleFr: 'Développeur fullstack', roleEn: 'Fullstack Developer', date: '09/2018 – 11/2019', order: 1 },
+  { id: 'open-agency', name: 'OPEN', roleFr: 'Concepteur Développeur Senior', roleEn: 'Senior Developer / Designer', start: '2026-09', end: null, order: 4 },
+  { id: 'sogeti', name: 'SOGETI', roleFr: 'Ingénieur logiciel', roleEn: 'Software Engineer', start: '2025-06', end: '2026-08', order: 3 },
+  { id: 'extia', name: 'EXTIA', roleFr: 'Ingénieur logiciel', roleEn: 'Software Engineer', start: '2019-10', end: '2025-05', order: 2 },
+  { id: 'rectorat-agency', name: "Rectorat de l'académie de Rennes", roleFr: 'Développeur fullstack', roleEn: 'Fullstack Developer', start: '2018-09', end: '2019-11', order: 1 },
 ];

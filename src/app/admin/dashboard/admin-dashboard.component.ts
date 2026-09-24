@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { formatPeriod } from '../../core/period';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
 import { Experience, SkillGroup } from '../../models/portfolio.models';
 import { AdminAuthService } from '../admin-auth.service';
 import { AdminDataService } from '../admin-data.service';
-import { ADMIN_PATH } from '../admin-path';
+import { AdminPath } from '../admin-path';
 import { describeWriteError } from '../firestore-error';
 import { ExperienceFormComponent } from './experience-form.component';
 import { SkillGroupFormComponent } from './skill-group-form.component';
@@ -59,7 +60,7 @@ type Tab = 'experiences' | 'skills';
               <div class="row">
                 <div>
                   <strong>{{ exp.company }}</strong> — {{ exp.roleFr }}
-                  <div class="meta">{{ exp.period }} · ordre {{ exp.order }}</div>
+                  <div class="meta">{{ periodOf(exp) }} · ordre {{ exp.order }}</div>
                 </div>
                 <div class="actions">
                   <button class="btn-sm" type="button" (click)="editingExperience.set(exp)">Modifier</button>
@@ -105,6 +106,7 @@ export class AdminDashboardComponent {
   readonly data = inject(PortfolioDataService);
   private readonly admin = inject(AdminDataService);
   private readonly router = inject(Router);
+  private readonly path = inject(AdminPath);
 
   readonly tab = signal<Tab>('experiences');
   readonly editingExperience = signal<Experience | null>(null);
@@ -118,6 +120,10 @@ export class AdminDashboardComponent {
     inject(Meta).updateTag({ name: 'robots', content: 'noindex, nofollow' });
   }
 
+  periodOf(exp: Experience): string {
+    return exp.start ? formatPeriod(exp.start, exp.end, 'fr') : `${exp.period ?? '?'} (à migrer)`;
+  }
+
   selectTab(tab: Tab): void {
     this.tab.set(tab);
     this.editingExperience.set(null);
@@ -127,7 +133,7 @@ export class AdminDashboardComponent {
   newExperience(): void {
     const maxOrder = Math.max(0, ...this.experiences().map((e) => e.order));
     this.editingExperience.set({
-      id: '', company: '', roleFr: '', roleEn: '', period: '', location: '',
+      id: '', company: '', roleFr: '', roleEn: '', start: '', end: null, location: '',
       contextFr: '', contextEn: '', bulletsFr: [], bulletsEn: [], tags: [], order: maxOrder + 1,
     });
   }
@@ -150,7 +156,7 @@ export class AdminDashboardComponent {
 
   async logout(): Promise<void> {
     await this.auth.logout();
-    await this.router.navigate(['/', ADMIN_PATH, 'login']);
+    await this.router.navigate(this.path.url('login'));
   }
 
   private async confirmAndRun(message: string, action: () => Promise<void>): Promise<void> {

@@ -3,36 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <base href="/">
+<!--
+  CSP commune aux deux hébergeurs (GitHub Pages ne permet pas d'en-têtes HTTP).
+  frame-ancestors n'est pas supporté en <meta> : il est envoyé en en-tête par Vercel (vercel.json).
+  style-src 'unsafe-inline' : Angular injecte les styles des composants dans des balises <style>.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F1F2E">
 <meta name="color-scheme" content="dark">
 <title>Mouhyi Eddine Moutarajji — Ingénieur logiciel senior Java / Angular</title>
-<meta name="description" content="Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular, 8 ans d'expérience — RATP, CNAF, SNCF, VINCI.">
-<link rel="canonical" href="https://mouhyi-moutarajji.github.io/">
+<meta name="description" content="Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular — RATP, CNAF, SNCF, VINCI.">
+<link rel="canonical" href="https://mouhyi-moutarajjiapp.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="Mouhyi Eddine Moutarajji">
 <meta property="og:title" content="Mouhyi Eddine Moutarajji — Ingénieur logiciel senior Java / Angular">
-<meta property="og:description" content="Portfolio de Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular.">
-<meta property="og:url" content="https://mouhyi-moutarajji.github.io/">
-<meta property="og:image" content="https://mouhyi-moutarajji.github.io/og-image.png">
+<meta property="og:description" content="Portfolio de Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular : RATP, CNAF, SNCF, VINCI.">
+<meta property="og:url" content="https://mouhyi-moutarajjiapp.vercel.app/">
+<meta property="og:image" content="https://mouhyi-moutarajjiapp.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Mouhyi Eddine Moutarajji — Ingénieur logiciel senior Java / Angular">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://mouhyi-moutarajji.github.io/og-image.png">
+<meta name="twitter:image" content="https://mouhyi-moutarajjiapp.vercel.app/og-image.png">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"Person",
   "name":"Mouhyi Eddine Moutarajji",
   "jobTitle":"Ingénieur logiciel senior Java / Angular",
-  "url":"https://mouhyi-moutarajji.github.io/",
+  "url":"https://mouhyi-moutarajjiapp.vercel.app/",
+  "image":"https://mouhyi-moutarajjiapp.vercel.app/og-image.png",
   "sameAs":["https://www.linkedin.com/in/mouhyi-moutarajji-47801814b"],
   "address":{"@type":"PostalAddress","addressLocality":"Rennes","addressCountry":"FR"},
   "knowsAbout":["Java","Angular","Spring Boot","TypeScript","Architecture logicielle"]
 }
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%BB%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
   <app-root></app-root>

@@ -1,6 +1,6 @@
-import { inject, InjectionToken } from '@angular/core';
+import { inject, InjectionToken, isDevMode } from '@angular/core';
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { Firestore, getFirestore } from 'firebase/firestore/lite';
+import { Firestore, getFirestore, setLogLevel } from 'firebase/firestore/lite';
 import { environment } from '../../environments/environment';
 
 /**
@@ -20,5 +20,9 @@ export const FIREBASE_APP = new InjectionToken<FirebaseApp>('FIREBASE_APP', {
 
 export const FIRESTORE = new InjectionToken<Firestore>('FIRESTORE', {
   providedIn: 'root',
-  factory: () => getFirestore(inject(FIREBASE_APP)),
+  factory: () => {
+    // En production, pas de logs du SDK dans la console des visiteurs.
+    if (!isDevMode()) setLogLevel('silent');
+    return getFirestore(inject(FIREBASE_APP));
+  },
 });

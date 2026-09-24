@@ -28,7 +28,7 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
             <div class="agency-card">
               <div class="name">{{ agency.name }}</div>
               <div class="role">{{ i18n.pick(agency.roleFr, agency.roleEn) }}</div>
-              <div class="date">{{ agency.date }}</div>
+              <div class="date">{{ i18n.period(agency.start, agency.end, agency.date, false) }}</div>
             </div>
           }
         </div>

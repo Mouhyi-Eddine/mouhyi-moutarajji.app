@@ -12,13 +12,14 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
         <div class="section-head"><span class="tick"></span><h2>{{ i18n.t('about.title') }}</h2></div>
         <div class="grid">
           <div>
-            <p>{{ i18n.t('about.p1') }}</p>
+            <p>{{ i18n.t('about.p1', { years: data.yearsOfExperience() }) }}</p>
             <p>{{ i18n.t('about.p2') }}</p>
           </div>
           <div class="stat-strip">
-            <div><div class="num">8</div><div class="lbl">{{ i18n.t('about.stat1') }}</div></div>
-            <div><div class="num">{{ missionsCount() }}</div><div class="lbl">{{ i18n.t('about.stat2') }}</div></div>
-            <div><div class="num">{{ languagesCount() }}</div><div class="lbl">{{ i18n.t('about.stat3') }}</div></div>
+            <div><div class="num">{{ data.yearsOfExperience() }}</div><div class="lbl">{{ i18n.t('about.stat1') }}</div></div>
+            <!-- Pas de « 0 » pendant le chargement : un tiret neutre à la place. -->
+            <div><div class="num">{{ data.hasData() ? missionsCount() : '—' }}</div><div class="lbl">{{ i18n.t('about.stat2') }}</div></div>
+            <div><div class="num">{{ data.hasData() ? languagesCount() : '—' }}</div><div class="lbl">{{ i18n.t('about.stat3') }}</div></div>
           </div>
         </div>
       </div>
@@ -26,7 +27,7 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
   `,
 })
 export class AboutComponent {
-  constructor(readonly i18n: I18nService, private readonly data: PortfolioDataService) {}
+  constructor(readonly i18n: I18nService, readonly data: PortfolioDataService) {}
 
   readonly missionsCount = computed(() => this.data.experiences().length);
   readonly languagesCount = computed(

@@ -2,6 +2,9 @@
  * Toutes les entités ont un champ fr/en séparé plutôt qu'un objet imbriqué
  * { fr, en } : plus simple à stocker dans Firestore et à éditer avec des
  * Reactive Forms plats (pas de FormGroup imbriqué nécessaire).
+ *
+ * Les périodes sont stockées en dates 'YYYY-MM' (neutres en langue) ; le
+ * libellé et la durée sont calculés à l'affichage (core/period.ts).
  */
 
 export interface Skill {
@@ -22,7 +25,8 @@ export interface Experience {
   company: string;
   roleFr: string;
   roleEn: string;
-  period: string;
+  start: string; // 'YYYY-MM'
+  end: string | null; // 'YYYY-MM', null = mission en cours
   location: string;
   contextFr: string;
   contextEn: string;
@@ -30,6 +34,8 @@ export interface Experience {
   bulletsEn: string[];
   tags: string[];
   order: number; // ordre d'affichage décroissant (le plus récent = order le plus haut)
+  /** @deprecated ancien libellé texte, lu uniquement si `start` est absent (données non migrées). */
+  period?: string;
 }
 
 export interface Education {
@@ -37,7 +43,7 @@ export interface Education {
   titleFr: string;
   titleEn: string;
   school: string;
-  date: string;
+  date: string; // 'MM/YYYY', neutre en langue
   order: number;
 }
 
@@ -46,8 +52,11 @@ export interface Agency {
   name: string;
   roleFr: string;
   roleEn: string;
-  date: string;
+  start: string; // 'YYYY-MM'
+  end: string | null; // null = en cours
   order: number;
+  /** @deprecated ancien libellé texte, lu uniquement si `start` est absent. */
+  date?: string;
 }
 
 export type Lang = 'fr' | 'en';
