@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ADMIN_PATH } from './admin/admin-path';
+import { adminPathGuard, adminSegmentMatcher } from './admin/admin-path';
 
 export const routes: Routes = [
   {
@@ -7,9 +7,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/public-site/public-site.component').then((m) => m.PublicSiteComponent),
   },
-  // Panel admin caché : absent de la navigation, protégé par adminGuard + Firebase Auth.
+  // Panel admin : aucun chemin en clair, voir admin-path.ts.
   {
-    path: ADMIN_PATH,
+    matcher: adminSegmentMatcher,
+    canMatch: [adminPathGuard],
     loadChildren: () => import('./admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   { path: '**', redirectTo: '' },

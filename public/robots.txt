@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mouhyi-moutarajjiapp.vercel.app/sitemap.xml

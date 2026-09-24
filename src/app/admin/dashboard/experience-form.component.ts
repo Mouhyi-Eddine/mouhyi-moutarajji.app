@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Experience } from '../../models/portfolio.models';
 import { AdminDataService } from '../admin-data.service';
 import { describeWriteError } from '../firestore-error';
@@ -7,6 +7,12 @@ import { describeWriteError } from '../firestore-error';
 /** Une ligne de textarea = une réalisation ; les tags sont séparés par des virgules. */
 const toLines = (text: string): string[] => text.split('\n').map((l) => l.trim()).filter(Boolean);
 const toTags = (text: string): string[] => text.split(',').map((t) => t.trim()).filter(Boolean);
+
+/** Les valeurs 'YYYY-MM' se comparent directement comme des chaînes. */
+const endAfterStart: ValidatorFn = (group) => {
+  const { start, end } = (group as FormGroup).getRawValue() as { start: string; end: string };
+  return start && end && end < start ? { endBeforeStart: true } : null;
+};
 
 @Component({
   selector: 'app-experience-form',
@@ -23,7 +29,12 @@ const toTags = (text: string): string[] => text.split(',').map((t) => t.trim()).
         <label>Lieu *<input formControlName="location" /></label>
         <label>Poste (FR) *<input formControlName="roleFr" /></label>
         <label>Poste (EN) *<input formControlName="roleEn" /></label>
-        <label>Période *<input formControlName="period" placeholder="02/2026 – 08/2026 · 7 mois" /></label>
+        <label>Début *<input type="month" formControlName="start" /></label>
+        <label>
+          Fin
+          <input type="month" formControlName="end" />
+          <span class="hint">Laisser vide si la mission est en cours.</span>
+        </label>
         <label>
           Ordre d'affichage *
           <input type="number" formControlName="order" min="0" />
@@ -52,7 +63,9 @@ const toTags = (text: string): string[] => text.split(',').map((t) => t.trim()).
         <span class="hint">Séparés par des virgules.</span>
       </label>
 
-      @if (form.invalid && form.touched) {
+      @if (form.hasError('endBeforeStart')) {
+        <p class="error">La date de fin est antérieure à la date de début.</p>
+      } @else if (form.invalid && form.touched) {
         <p class="error">Les champs marqués * sont obligatoires.</p>
       }
       @if (error()) {
@@ -82,7 +95,8 @@ export class ExperienceFormComponent {
     company: ['', Validators.required],
     roleFr: ['', Validators.required],
     roleEn: ['', Validators.required],
-    period: ['', Validators.required],
+    start: ['', Validators.required],
+    end: [''],
     location: ['', Validators.required],
     contextFr: [''],
     contextEn: [''],
@@ -90,7 +104,7 @@ export class ExperienceFormComponent {
     bulletsEn: [''],
     tags: [''],
     order: [0, [Validators.required, Validators.min(0)]],
-  });
+  }, { validators: endAfterStart });
 
   constructor() {
     // Recharge le formulaire à chaque changement de l'expérience éditée.
@@ -100,7 +114,8 @@ export class ExperienceFormComponent {
         company: e.company,
         roleFr: e.roleFr,
         roleEn: e.roleEn,
-        period: e.period,
+        start: e.start ?? '',
+        end: e.end ?? '',
         location: e.location,
         contextFr: e.contextFr,
         contextEn: e.contextEn,
@@ -127,7 +142,8 @@ export class ExperienceFormComponent {
         company: v.company.trim(),
         roleFr: v.roleFr.trim(),
         roleEn: v.roleEn.trim(),
-        period: v.period.trim(),
+        start: v.start,
+        end: v.end || null,
         location: v.location.trim(),
         contextFr: v.contextFr.trim(),
         contextEn: v.contextEn.trim(),

@@ -1,5 +1,6 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { Lang } from '../models/portfolio.models';
+import { formatPeriod } from './period';
 
 const STR: Record<Lang, Record<string, string>> = {
   fr: {
@@ -8,7 +9,9 @@ const STR: Record<Lang, Record<string, string>> = {
     'nav.experience': 'Expériences',
     'nav.education': 'Formation',
     'nav.contact': 'Contact',
-    'hero.kicker': "Ingénieur logiciel · 8 ans d'expérience",
+    'nav.openMenu': 'Ouvrir le menu',
+    'nav.closeMenu': 'Fermer le menu',
+    'hero.kicker': "Ingénieur logiciel · {years} ans d'expérience",
     'hero.title': 'Ingénieur logiciel senior — Java / Angular',
     'hero.lead':
       "Java & Angular full-stack. Ingénieur logiciel pour la RATP, la CNAF, SNCF, VINCI et d'autres, avec un fil rouge : faire évoluer des applications existantes sans casser ce qui marche.",
@@ -16,7 +19,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'hero.cta2': 'Me contacter',
     'about.title': 'Profil',
     'about.p1':
-      "Ingénieur en informatique avec 8 ans d'expérience, j'ai construit une expertise solide sur le développement logiciel et la gestion de projets, principalement sur des applications métier en environnement Java / Angular.",
+      "Ingénieur en informatique avec {years} ans d'expérience, j'ai construit une expertise solide sur le développement logiciel et la gestion de projets, principalement sur des applications métier en environnement Java / Angular.",
     'about.p2':
       "Je maintiens une veille active sur les technologies émergentes, et j'aime particulièrement les missions où il faut reprendre l'existant : comprendre une architecture en place, la moderniser par étapes, sans interrompre le service.",
     'about.stat1': "ans d'expérience",
@@ -42,7 +45,9 @@ const STR: Record<Lang, Record<string, string>> = {
     'nav.experience': 'Experience',
     'nav.education': 'Education',
     'nav.contact': 'Contact',
-    'hero.kicker': 'Software engineer · 8 years of experience',
+    'nav.openMenu': 'Open menu',
+    'nav.closeMenu': 'Close menu',
+    'hero.kicker': 'Software engineer · {years} years of experience',
     'hero.title': 'Senior Software Engineer — Java / Angular',
     'hero.lead':
       'Java & Angular full-stack. Software engineer for RATP, CNAF, SNCF, VINCI and others, with a common thread: evolving existing applications without breaking what works.',
@@ -50,7 +55,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'hero.cta2': 'Get in touch',
     'about.title': 'Profile',
     'about.p1':
-      "Software engineer with 8 years of experience, I've built solid expertise in software development and project management, mainly on business applications in Java / Angular environments.",
+      "Software engineer with {years} years of experience, I've built solid expertise in software development and project management, mainly on business applications in Java / Angular environments.",
     'about.p2':
       'I keep an active watch on emerging technologies, and I particularly enjoy missions that involve picking up existing systems: understanding an architecture already in place and modernizing it step by step, without interrupting the service.',
     'about.stat1': 'years of experience',
@@ -78,8 +83,8 @@ const TITLE: Record<Lang, string> = {
 };
 
 const DESCRIPTION: Record<Lang, string> = {
-  fr: "Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular, 8 ans d'expérience — RATP, CNAF, SNCF, VINCI.",
-  en: 'Mouhyi Eddine Moutarajji, senior software engineer in Java / Angular, with 8 years of experience — RATP, CNAF, SNCF, VINCI.',
+  fr: "Mouhyi Eddine Moutarajji, ingénieur logiciel senior Java / Angular — RATP, CNAF, SNCF, VINCI.",
+  en: 'Mouhyi Eddine Moutarajji, senior software engineer in Java / Angular — RATP, CNAF, SNCF, VINCI.',
 };
 
 function detectInitialLang(): Lang {
@@ -125,5 +130,10 @@ export class I18nService {
   /** Choisit le champ FR ou EN selon la langue courante. */
   pick(fr: string, en: string): string {
     return this.lang() === 'en' ? en : fr;
+  }
+
+  /** Période localisée ; `legacy` = ancien libellé texte des documents pas encore migrés. */
+  period(start: string | undefined, end: string | null | undefined, legacy?: string, withDuration = true): string {
+    return start ? formatPeriod(start, end ?? null, this.lang(), withDuration) : (legacy ?? '');
   }
 }

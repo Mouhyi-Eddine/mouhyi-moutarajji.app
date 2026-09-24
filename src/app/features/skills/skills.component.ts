@@ -20,6 +20,19 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
                 }
               </div>
             </div>
+          } @empty {
+            @if (data.status() === 'loading') {
+              @for (i of [1, 2, 3]; track i) {
+                <div class="skill-group" aria-hidden="true">
+                  <span class="skeleton" style="width:90px"></span>
+                  <div class="chip-row">
+                    @for (w of [70, 110, 90, 60, 100]; track $index) {
+                      <span class="skeleton chip-skeleton" [style.width.px]="w"></span>
+                    }
+                  </div>
+                </div>
+              }
+            }
           }
         </div>
       </div>
@@ -27,7 +40,7 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
   `,
 })
 export class SkillsComponent {
-  constructor(readonly i18n: I18nService, private readonly data: PortfolioDataService) {}
+  constructor(readonly i18n: I18nService, readonly data: PortfolioDataService) {}
 
   readonly sortedGroups = computed(() => [...this.data.skillGroups()].sort((a, b) => a.order - b.order));
 }

@@ -19,7 +19,7 @@ import { ContactComponent } from '../contact/contact.component';
     <app-nav />
     <main id="main-content">
       <app-hero />
-      @if (data.status() === 'error') {
+      @if (data.status() === 'error' && !data.hasData()) {
         <p class="data-error wrap" role="status">{{ i18n.t('data.error') }}</p>
       }
       <app-about />

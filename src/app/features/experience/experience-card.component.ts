@@ -12,7 +12,7 @@ import { Experience } from '../../models/portfolio.models';
     <article class="exp-card" appReveal>
       <div class="exp-head">
         <span class="company">{{ exp().company }}</span>
-        <span class="period mono">{{ exp().period }}</span>
+        <span class="period mono">{{ i18n.period(exp().start, exp().end, exp().period) }}</span>
       </div>
       <div class="exp-role">
         {{ i18n.pick(exp().roleFr, exp().roleEn) }} <span class="loc">— {{ exp().location }}</span>
