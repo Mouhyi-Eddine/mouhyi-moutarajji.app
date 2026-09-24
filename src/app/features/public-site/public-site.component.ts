@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
+import { PortfolioDataService } from '../../core/portfolio-data.service';
 import { NavComponent } from '../nav/nav.component';
 import { HeroComponent } from '../hero/hero.component';
 import { AboutComponent } from '../about/about.component';
@@ -18,6 +19,9 @@ import { ContactComponent } from '../contact/contact.component';
     <app-nav />
     <main id="main-content">
       <app-hero />
+      @if (data.status() === 'error') {
+        <p class="data-error wrap" role="status">{{ i18n.t('data.error') }}</p>
+      }
       <app-about />
       <app-skills />
       <app-experience />
@@ -28,5 +32,5 @@ import { ContactComponent } from '../contact/contact.component';
   `,
 })
 export class PublicSiteComponent {
-  constructor(readonly i18n: I18nService) {}
+  constructor(readonly i18n: I18nService, readonly data: PortfolioDataService) {}
 }

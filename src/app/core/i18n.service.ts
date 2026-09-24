@@ -34,6 +34,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'contact.linkedinLabel': 'LinkedIn (ouvre un nouvel onglet)',
     'footer': 'Mouhyi Eddine Moutarajji — Rennes, France',
     'skip.link': 'Aller au contenu',
+    'data.error': 'Le contenu détaillé est momentanément indisponible. Merci de réessayer dans quelques instants.',
   },
   en: {
     'nav.about': 'Profile',
@@ -67,6 +68,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'contact.linkedinLabel': 'LinkedIn (opens in a new tab)',
     'footer': 'Mouhyi Eddine Moutarajji — Rennes, France',
     'skip.link': 'Skip to content',
+    'data.error': 'Detailed content is temporarily unavailable. Please try again in a moment.',
   },
 };
 

@@ -3,4 +3,5 @@
 /.angular
 /out-tsc
 .env
+.firebase/
 *.log

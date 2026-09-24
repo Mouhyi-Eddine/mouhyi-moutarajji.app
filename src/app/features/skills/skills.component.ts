@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
 
@@ -29,7 +29,5 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
 export class SkillsComponent {
   constructor(readonly i18n: I18nService, private readonly data: PortfolioDataService) {}
 
-  sortedGroups() {
-    return [...this.data.skillGroups()].sort((a, b) => a.order - b.order);
-  }
+  readonly sortedGroups = computed(() => [...this.data.skillGroups()].sort((a, b) => a.order - b.order));
 }

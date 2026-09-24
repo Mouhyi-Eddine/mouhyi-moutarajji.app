@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ADMIN_PATH } from './admin/admin-path';
 
 export const routes: Routes = [
   {
@@ -6,7 +7,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/public-site/public-site.component').then((m) => m.PublicSiteComponent),
   },
-  // La route admin cachée (ex: /panel-xxxxxx) sera ajoutée à l'étape 3,
-  // protégée par un AuthGuard + Firebase Authentication.
+  // Panel admin caché : absent de la navigation, protégé par adminGuard + Firebase Auth.
+  {
+    path: ADMIN_PATH,
+    loadChildren: () => import('./admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+  },
   { path: '**', redirectTo: '' },
 ];
