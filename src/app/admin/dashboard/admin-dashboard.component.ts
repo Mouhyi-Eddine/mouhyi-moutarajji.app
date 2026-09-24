@@ -3,19 +3,22 @@ import { Meta } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { formatPeriod } from '../../core/period';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
-import { Experience, SkillGroup } from '../../models/portfolio.models';
+import { Agency, Experience, SkillGroup } from '../../models/portfolio.models';
 import { AdminAuthService } from '../admin-auth.service';
 import { AdminDataService } from '../admin-data.service';
 import { AdminPath } from '../admin-path';
 import { describeWriteError } from '../firestore-error';
+import { nextFreeOrder } from '../form-utils';
+import { AgencyFormComponent } from './agency-form.component';
 import { ExperienceFormComponent } from './experience-form.component';
+import { ProfileFormComponent } from './profile-form.component';
 import { SkillGroupFormComponent } from './skill-group-form.component';
 
-type Tab = 'experiences' | 'skills';
+type Tab = 'experiences' | 'skills' | 'agencies' | 'profile';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [ExperienceFormComponent, SkillGroupFormComponent],
+  imports: [ExperienceFormComponent, SkillGroupFormComponent, AgencyFormComponent, ProfileFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: '../admin.css',
   template: `
@@ -34,6 +37,12 @@ type Tab = 'experiences' | 'skills';
         </button>
         <button type="button" role="tab" [attr.aria-selected]="tab() === 'skills'" (click)="selectTab('skills')">
           Compétences ({{ skillGroups().length }})
+        </button>
+        <button type="button" role="tab" [attr.aria-selected]="tab() === 'agencies'" (click)="selectTab('agencies')">
+          Sociétés de conseil ({{ agencies().length }})
+        </button>
+        <button type="button" role="tab" [attr.aria-selected]="tab() === 'profile'" (click)="selectTab('profile')">
+          Profil
         </button>
       </div>
 
@@ -97,6 +106,34 @@ type Tab = 'experiences' | 'skills';
             }
           </div>
         }
+        @case ('agencies') {
+          @if (editingAgency(); as agency) {
+            <app-agency-form [agency]="agency" (done)="editingAgency.set(null)" />
+          } @else {
+            <div class="actions" style="margin-bottom:16px">
+              <button class="btn-sm primary" type="button" (click)="newAgency()">+ Nouvelle société</button>
+            </div>
+          }
+          <div class="list">
+            @for (agency of agencies(); track agency.id) {
+              <div class="row">
+                <div>
+                  <strong>{{ agency.name }}</strong> — {{ agency.roleFr }}
+                  <div class="meta">{{ agencyPeriod(agency) }} · ordre {{ agency.order }}</div>
+                </div>
+                <div class="actions">
+                  <button class="btn-sm" type="button" (click)="editingAgency.set(agency)">Modifier</button>
+                  <button class="btn-sm danger" type="button" (click)="deleteAgency(agency)">Supprimer</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="muted">Aucune société de conseil.</p>
+            }
+          </div>
+        }
+        @case ('profile') {
+          <app-profile-form />
+        }
       }
     </div>
   `,
@@ -111,10 +148,12 @@ export class AdminDashboardComponent {
   readonly tab = signal<Tab>('experiences');
   readonly editingExperience = signal<Experience | null>(null);
   readonly editingSkillGroup = signal<SkillGroup | null>(null);
+  readonly editingAgency = signal<Agency | null>(null);
   readonly error = signal<string | null>(null);
 
   readonly experiences = computed(() => [...this.data.experiences()].sort((a, b) => b.order - a.order));
   readonly skillGroups = computed(() => [...this.data.skillGroups()].sort((a, b) => a.order - b.order));
+  readonly agencies = computed(() => [...this.data.agencies()].sort((a, b) => b.order - a.order));
 
   constructor() {
     inject(Meta).updateTag({ name: 'robots', content: 'noindex, nofollow' });
@@ -128,10 +167,23 @@ export class AdminDashboardComponent {
     this.tab.set(tab);
     this.editingExperience.set(null);
     this.editingSkillGroup.set(null);
+    this.editingAgency.set(null);
+  }
+
+  agencyPeriod(agency: Agency): string {
+    return agency.start ? formatPeriod(agency.start, agency.end, 'fr', false) : (agency.date ?? '?');
+  }
+
+  newAgency(): void {
+    this.editingAgency.set({ id: '', name: '', roleFr: '', roleEn: '', start: '', end: null, order: nextFreeOrder(this.agencies().map((a) => a.order)) });
+  }
+
+  deleteAgency(agency: Agency): Promise<void> {
+    return this.confirmAndRun(`Supprimer la société « ${agency.name} » ?`, () => this.admin.deleteAgency(agency.id));
   }
 
   newExperience(): void {
-    const maxOrder = Math.max(0, ...this.experiences().map((e) => e.order));
+    const maxOrder = nextFreeOrder(this.experiences().map((e) => e.order)) - 1;
     this.editingExperience.set({
       id: '', company: '', roleFr: '', roleEn: '', start: '', end: null, location: '',
       contextFr: '', contextEn: '', bulletsFr: [], bulletsEn: [], tags: [], order: maxOrder + 1,

@@ -5,6 +5,7 @@
  * Angular : une fois importées, les données se gèrent depuis le panel admin.
  */
 import type { Agency, Education, Experience, SkillGroup } from '../src/app/models/portfolio.models';
+import { AGENCIES_EN, EDUCATION_EN, EXPERIENCES_EN, SKILL_GROUPS_EN } from './content-en.ts';
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
@@ -292,3 +293,14 @@ export const AGENCIES: Agency[] = [
   { id: 'extia', name: 'EXTIA', roleFr: 'Ingénieur logiciel', roleEn: 'Software Engineer', start: '2019-10', end: '2025-05', order: 2 },
   { id: 'rectorat-agency', name: "Rectorat de l'académie de Rennes", roleFr: 'Développeur fullstack', roleEn: 'Fullstack Developer', start: '2018-09', end: '2019-11', order: 1 },
 ];
+
+// Textes anglais relus : content-en.ts fait foi (les valeurs EN ci-dessus sont les versions d'origine).
+for (const e of EXPERIENCES) Object.assign(e, EXPERIENCES_EN[e.id]);
+for (const a of AGENCIES) Object.assign(a, AGENCIES_EN[a.id]);
+for (const d of EDUCATION) Object.assign(d, EDUCATION_EN[d.id]);
+for (const g of SKILL_GROUPS) {
+  const en = SKILL_GROUPS_EN[g.id];
+  if (!en) continue;
+  g.nameEn = en.nameEn;
+  for (const s of g.skills) s.en = en.skills?.[s.fr] ?? s.en;
+}

@@ -59,4 +59,22 @@ export interface Agency {
   date?: string;
 }
 
+/**
+ * Section « Profil » du site public (document unique `profile/main`).
+ * `{years}` dans les paragraphes est remplacé par le nombre d'années calculé.
+ * Un champ vide = texte par défaut de l'application.
+ */
+export interface Profile {
+  aboutP1Fr: string;
+  aboutP1En: string;
+  aboutP2Fr: string;
+  aboutP2En: string;
+  statYearsFr: string;
+  statYearsEn: string;
+  statMissionsFr: string;
+  statMissionsEn: string;
+  statLanguagesFr: string;
+  statLanguagesEn: string;
+}
+
 export type Lang = 'fr' | 'en';

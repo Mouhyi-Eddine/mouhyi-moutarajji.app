@@ -7,4 +7,8 @@ export const COLLECTIONS = {
   skills: 'skills',
   education: 'education',
   agencies: 'agencies',
+  profile: 'profile',
 } as const;
+
+/** La section Profil est un document unique. */
+export const PROFILE_DOC_ID = 'main';

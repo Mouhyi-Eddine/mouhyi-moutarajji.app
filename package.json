@@ -7,7 +7,8 @@
     "postbuild": "node scripts/postbuild.mjs && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/snapshot-firestore.mts",
     "watch": "ng build --watch --configuration development",
     "seed": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/seed-firestore.mts",
-    "migrate:dates": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/migrate-dates.mts"
+    "migrate:dates": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/migrate-dates.mts",
+    "apply:en-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/apply-en-content.mts"
   },
   "private": true,
   "dependencies": {

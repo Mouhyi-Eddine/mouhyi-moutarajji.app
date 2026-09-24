@@ -18,21 +18,22 @@ type SkillForm = FormGroup<{ fr: FormControl<string>; en: FormControl<string> }>
   styleUrl: '../admin.css',
   styles: [':host{min-height:0; padding:0;}'],
   template: `
-    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <h2>{{ group().id ? 'Modifier la catégorie' : 'Nouvelle catégorie' }}</h2>
+      <p class="hint"><span class="req">*</span> champ obligatoire</p>
 
       <div class="grid-2">
-        <label>Nom de la catégorie (FR) *<input formControlName="nameFr" /></label>
-        <label>Nom de la catégorie (EN) *<input formControlName="nameEn" /></label>
+        <label>Nom de la catégorie (FR) <span class="req">*</span><input formControlName="nameFr" /></label>
+        <label>Nom de la catégorie (EN) <span class="req">*</span><input formControlName="nameEn" /></label>
         <label>
-          Ordre d'affichage *
+          Ordre d'affichage <span class="req">*</span>
           <input type="number" formControlName="order" min="0" />
           <span class="hint">Le plus petit s'affiche en premier.</span>
         </label>
       </div>
 
       <div formArrayName="skills" class="list">
-        <span class="muted">Compétences (FR / EN)</span>
+        <span class="muted">Compétences — nom FR et EN <span class="req">*</span></span>
         @for (skill of form.controls.skills.controls; track skill; let i = $index) {
           <div class="skill-line" [formGroupName]="i">
             <input formControlName="fr" placeholder="Nom (FR)" [attr.aria-label]="'Compétence ' + (i + 1) + ' (FR)'" />
@@ -43,18 +44,18 @@ type SkillForm = FormGroup<{ fr: FormControl<string>; en: FormControl<string> }>
         <div><button class="btn-sm" type="button" (click)="addSkill()">+ Ajouter une compétence</button></div>
       </div>
 
-      @if (form.invalid && form.touched) {
-        <p class="error">Tous les champs sont obligatoires (nom FR et EN de chaque compétence compris).</p>
-      }
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
       }
 
       <div class="actions">
-        <button class="btn-sm primary" type="submit" [disabled]="pending()">
+        <button class="btn-sm primary" type="submit" [disabled]="form.invalid || pending()">
           {{ pending() ? 'Enregistrement…' : 'Enregistrer' }}
         </button>
         <button class="btn-sm" type="button" (click)="done.emit()">Annuler</button>
+        @if (form.invalid) {
+          <span class="form-status">Complétez les champs en rouge pour enregistrer.</span>
+        }
       </div>
     </form>
   `,
@@ -96,10 +97,7 @@ export class SkillGroupFormComponent {
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    if (this.form.invalid) return;
     const v = this.form.getRawValue();
     this.pending.set(true);
     this.error.set(null);

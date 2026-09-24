@@ -21,17 +21,22 @@ export function monthsBetween(start: YearMonth, end: YearMonth | null, now = new
   return a === null || b === null ? 0 : Math.max(1, b - a + 1);
 }
 
-/** Années complètes écoulées depuis `start` (pour « 8 ans d'expérience »). */
-export function fullYearsSince(start: YearMonth, now = new Date()): number {
-  const a = toIndex(start);
-  const b = toIndex(currentMonth(now));
-  return a === null || b === null ? 0 : Math.floor((b - a) / 12);
+/**
+ * Années d'expérience, arrondies à l'année en cours : année courante moins
+ * année de début (2018-09 → 8 en 2026, 9 dès janvier 2027).
+ */
+export function yearsSince(start: YearMonth, now = new Date()): number | null {
+  const m = YM.exec(start);
+  return m ? Math.max(0, now.getFullYear() - Number(m[1])) : null;
 }
 
-/** '2026-02' → '02/2026' */
-export function formatMonth(ym: YearMonth): string {
+const EN_MONTH = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+/** '2026-02' → '02/2026' (FR) ou 'Feb 2026' (EN). */
+export function formatMonth(ym: YearMonth, lang: Lang = 'fr'): string {
   const m = YM.exec(ym);
-  return m ? `${m[2]}/${m[1]}` : ym;
+  if (!m) return ym;
+  return lang === 'en' ? EN_MONTH.format(new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, 1))) : `${m[2]}/${m[1]}`;
 }
 
 export function formatDuration(months: number, lang: Lang): string {
@@ -48,9 +53,12 @@ export function formatDuration(months: number, lang: Lang): string {
   return parts.join(' ');
 }
 
-/** '02/2026 – 08/2026 · 7 mois' ; fin vide → '09/2026 – aujourd'hui · 1 mois'. */
+/**
+ * FR : '02/2026 – 08/2026 · 7 mois' ; fin vide → '09/2026 – aujourd'hui · 1 mois'.
+ * EN : 'Feb 2026 – Aug 2026 · 7 months' ; fin vide → 'Sep 2026 – Present · 1 month'.
+ */
 export function formatPeriod(start: YearMonth, end: YearMonth | null, lang: Lang, withDuration = true): string {
-  const to = end ? formatMonth(end) : lang === 'fr' ? "aujourd'hui" : 'present';
-  const range = `${formatMonth(start)} – ${to}`;
+  const to = end ? formatMonth(end, lang) : lang === 'fr' ? "aujourd'hui" : 'Present';
+  const range = `${formatMonth(start, lang)} – ${to}`;
   return withDuration ? `${range} · ${formatDuration(monthsBetween(start, end), lang)}` : range;
 }

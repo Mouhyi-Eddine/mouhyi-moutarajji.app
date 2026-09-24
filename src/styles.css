@@ -71,16 +71,6 @@ header.nav{position:fixed; top:0; left:0; right:0; z-index:50; padding-top:env(s
 .btn-ghost{color:var(--ink); background:transparent;}
 .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
 
-.schema{margin-top:56px; border:1px solid var(--line); border-radius:6px; background:var(--bg-alt); padding:18px 18px 6px; overflow:hidden;}
-.schema svg{width:100%; height:auto; display:block;}
-.schema-path{fill:none; stroke:var(--accent); stroke-width:1.6; stroke-dasharray:1; stroke-dashoffset:1; animation:draw 2.1s ease forwards .3s;}
-.schema-dot{fill:var(--bg-alt); stroke:var(--accent); stroke-width:1.6; opacity:0; animation:pop .4s ease forwards;}
-.schema-label{font-family:'IBM Plex Mono', monospace; font-size:9.5px; fill:var(--ink-dimmer); opacity:0; animation:pop .4s ease forwards;}
-@keyframes draw{to{stroke-dashoffset:0;}}
-/* Sur petit écran, les libellés du schéma deviendraient illisibles (< 5 px) : on les masque. */
-@media (max-width:640px){ .schema-label{display:none;} }
-@keyframes pop{to{opacity:1;}}
-@media (prefers-reduced-motion: reduce){ .schema-path,.schema-dot,.schema-label{animation:none !important; stroke-dashoffset:0; opacity:1;} }
 
 section{padding:88px 0; border-top:1px solid var(--line-soft);}
 .section-head{display:flex; align-items:baseline; gap:14px; margin-bottom:44px;}

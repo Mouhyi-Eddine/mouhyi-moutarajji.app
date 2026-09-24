@@ -9,7 +9,7 @@ import { Experience } from '../../models/portfolio.models';
   imports: [RevealDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <article class="exp-card" appReveal>
+    <article class="exp-card" appReveal [id]="'exp-' + exp().id">
       <div class="exp-head">
         <span class="company">{{ exp().company }}</span>
         <span class="period mono">{{ i18n.period(exp().start, exp().end, exp().period) }}</span>
@@ -33,7 +33,7 @@ import { Experience } from '../../models/portfolio.models';
                 (click)="toggle()">
           <span class="chev">▾</span>
           <span class="label">
-            {{ expanded() ? i18n.t('exp.showLess') : i18n.t('exp.showMore', { n: restBullets().length }) }}
+            {{ expanded() ? i18n.t('exp.showLess') : restBullets().length === 1 ? i18n.t('exp.showMoreOne') : i18n.t('exp.showMore', { n: restBullets().length }) }}
           </span>
         </button>
       }

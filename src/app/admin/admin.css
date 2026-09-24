@@ -1,5 +1,5 @@
 /* Styles partagés des écrans admin (réutilisent les variables du site public). */
-:host{display:block; min-height:100vh; padding:48px 0 80px;}
+:host{display:block; min-height:100vh; padding:48px 0 80px; --danger:#E86A5F;}
 .panel{max-width:960px; margin:0 auto; padding:0 24px;}
 .panel-head{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:32px;}
 .panel-head h1{font-size:1.5rem;}
@@ -25,11 +25,25 @@
 form.card{border:1px solid var(--line); background:var(--bg-alt); border-radius:6px; padding:24px; display:grid; gap:16px; margin-bottom:24px;}
 form.card h2{font-size:1.2rem;}
 .grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;}
-label{display:grid; gap:6px; font-size:.85rem; color:var(--ink-dim);}
-input, textarea{font:inherit; font-size:.92rem; color:var(--ink); background:var(--bg); border:1px solid var(--line);
+/* Champs bilingues : FR à gauche, EN à droite, toujours alignés par paire. */
+.grid-pairs{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:640px){ .grid-pairs{grid-template-columns:1fr;} }
+/* Bloc (et non grille) : le texte du libellé et son astérisque restent sur la même ligne. */
+label{display:block; font-size:.85rem; color:var(--ink-dim);}
+label > input, label > textarea{margin-top:6px;}
+label > .hint, label > .error{display:block; margin-top:6px;}
+input, textarea{display:block; font:inherit; font-size:.92rem; color:var(--ink); background:var(--bg); border:1px solid var(--line);
   border-radius:var(--radius); padding:9px 11px; width:100%;}
 textarea{min-height:110px; resize:vertical;}
-input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched{border-color:#E86A5F;}
+/*
+ * Validation : tout champ invalide (obligatoire vide, valeur incorrecte) est
+ * signalé en rouge immédiatement, bordure et libellé, sans attendre qu'il ait
+ * été touché. `.invalid` couvre les erreurs portées par le groupe (ex. fin < début).
+ */
+input.ng-invalid, textarea.ng-invalid, input.invalid{border-color:var(--danger); box-shadow:inset 3px 0 0 var(--danger);}
+label:has(> input.ng-invalid), label:has(> textarea.ng-invalid), label:has(> input.invalid){color:var(--danger);}
+.req{color:var(--danger); font-weight:600;}
 .hint{color:var(--ink-dimmer); font-size:.78rem;}
-.error{color:#E86A5F; font-size:.8rem;}
+.error{color:var(--danger); font-size:.8rem;}
+.form-status{color:var(--ink-dimmer); font-size:.8rem; align-self:center;}
 .skill-line{display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;}

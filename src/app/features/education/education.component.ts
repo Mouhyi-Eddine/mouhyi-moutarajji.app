@@ -17,7 +17,7 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
                 <div class="title">{{ i18n.pick(item.titleFr, item.titleEn) }}</div>
                 <div class="school">{{ item.school }}</div>
               </div>
-              <div class="date">{{ item.date }}</div>
+              <div class="date">{{ i18n.month(item.date) }}</div>
             </div>
           }
         </div>

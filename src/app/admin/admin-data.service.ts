@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
-import { COLLECTIONS } from '../core/collections';
+import { COLLECTIONS, PROFILE_DOC_ID } from '../core/collections';
 import { FIRESTORE } from '../core/firebase';
 import { PortfolioDataService } from '../core/portfolio-data.service';
-import { Experience, SkillGroup } from '../models/portfolio.models';
+import { Agency, Experience, Profile, SkillGroup } from '../models/portfolio.models';
 
 type Collection = (typeof COLLECTIONS)[keyof typeof COLLECTIONS];
 
@@ -32,6 +32,19 @@ export class AdminDataService {
 
   deleteSkillGroup(id: string): Promise<void> {
     return this.remove(COLLECTIONS.skills, id);
+  }
+
+  saveAgency(agency: Agency): Promise<void> {
+    return this.save(COLLECTIONS.agencies, agency);
+  }
+
+  deleteAgency(id: string): Promise<void> {
+    return this.remove(COLLECTIONS.agencies, id);
+  }
+
+  /** Le profil est un document unique (profile/main), créé à la première sauvegarde. */
+  saveProfile(profile: Profile): Promise<void> {
+    return this.save(COLLECTIONS.profile, { id: PROFILE_DOC_ID, ...profile });
   }
 
   /** id vide = création avec un id généré par Firestore. L'id n'est pas stocké dans les champs. */

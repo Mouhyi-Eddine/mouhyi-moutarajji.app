@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
+import { profileText } from '../../core/profile-defaults';
 
 @Component({
   selector: 'app-about',
@@ -12,14 +13,22 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
         <div class="section-head"><span class="tick"></span><h2>{{ i18n.t('about.title') }}</h2></div>
         <div class="grid">
           <div>
-            <p>{{ i18n.t('about.p1', { years: data.yearsOfExperience() }) }}</p>
-            <p>{{ i18n.t('about.p2') }}</p>
+            @if (data.hasData()) {
+              <p>{{ text('aboutP1') }}</p>
+              <p>{{ text('aboutP2') }}</p>
+            } @else {
+              <div aria-hidden="true">
+                @for (w of [100, 96, 88, 60]; track $index) {
+                  <span class="skeleton" [style.width.%]="w"></span>
+                }
+              </div>
+            }
           </div>
           <div class="stat-strip">
-            <div><div class="num">{{ data.yearsOfExperience() }}</div><div class="lbl">{{ i18n.t('about.stat1') }}</div></div>
             <!-- Pas de « 0 » pendant le chargement : un tiret neutre à la place. -->
-            <div><div class="num">{{ data.hasData() ? missionsCount() : '—' }}</div><div class="lbl">{{ i18n.t('about.stat2') }}</div></div>
-            <div><div class="num">{{ data.hasData() ? languagesCount() : '—' }}</div><div class="lbl">{{ i18n.t('about.stat3') }}</div></div>
+            <div><div class="num">{{ data.yearsOfExperience() ?? '—' }}</div><div class="lbl">{{ text('statYears') }}</div></div>
+            <div><div class="num">{{ data.hasData() ? missionsCount() : '—' }}</div><div class="lbl">{{ text('statMissions') }}</div></div>
+            <div><div class="num">{{ data.hasData() ? languagesCount() : '—' }}</div><div class="lbl">{{ text('statLanguages') }}</div></div>
           </div>
         </div>
       </div>
@@ -33,4 +42,8 @@ export class AboutComponent {
   readonly languagesCount = computed(
     () => this.data.skillGroups().find((g) => g.id === 'languages')?.skills.length ?? 0,
   );
+
+  text(key: Parameters<typeof profileText>[1]): string {
+    return profileText(this.data.profile(), key, this.i18n.lang(), this.data.yearsOfExperience());
+  }
 }

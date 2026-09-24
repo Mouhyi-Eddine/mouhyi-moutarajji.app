@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Lecture publique des 4 collections du portfolio, écriture réservée au seul
+// Lecture publique des collections du portfolio, écriture réservée au seul
 // compte admin. Tout chemin non listé ici est refusé par défaut.
 // Remplacez REPLACE_WITH_ADMIN_UID par l'UID du compte admin
 // (console Firebase > Authentication > Users > colonne "User UID").
@@ -27,6 +27,12 @@ service cloud.firestore {
     }
 
     match /agencies/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Section « Profil » du site public (document unique profile/main).
+    match /profile/{id} {
       allow read: if true;
       allow write: if isAdmin();
     }
