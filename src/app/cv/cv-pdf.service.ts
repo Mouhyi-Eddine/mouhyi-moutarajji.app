@@ -23,12 +23,26 @@ export class CvPdfService {
   private readonly i18n = inject(I18nService);
 
   readonly busy = signal(false);
-  readonly failed = signal(false);
+  /** Clé i18n du message d'erreur affiché sous le bouton, ou null. */
+  readonly error = signal<string | null>(null);
 
-  async download(): Promise<void> {
+  /**
+   * Ouvre le CV dans un nouvel onglet (visionneuse PDF du navigateur), d'où le
+   * visiteur choisit lui-même de l'enregistrer ou de l'imprimer.
+   */
+  async open(): Promise<void> {
     if (this.busy()) return;
+    // L'onglet est ouvert tout de suite, pendant le clic : ouvert après les `await`
+    // ci-dessous, il serait pris pour une popup et bloqué (Safari, Firefox).
+    const tab = window.open('', '_blank');
+    if (!tab) {
+      this.error.set('cv.blocked');
+      return;
+    }
+    tab.opener = null;
+    this.showPlaceholder(tab);
     this.busy.set(true);
-    this.failed.set(false);
+    this.error.set(null);
     try {
       // Données relues au moment du clic ; si Firestore tarde, on génère avec celles déjà affichées.
       await Promise.race([this.data.reload(), new Promise((r) => setTimeout(r, FRESH_DATA_TIMEOUT_MS))]);
@@ -39,12 +53,24 @@ export class CvPdfService {
         import('./cv-document'),
       ]);
       pdfMake.addVirtualFileSystem(vfs);
-      await pdfMake.createPdf(buildCvDocument(content)).download(`CV-${CONTACT.name.replaceAll(' ', '-')}.pdf`);
+      await pdfMake.createPdf(buildCvDocument(content)).open(tab);
     } catch (err) {
       console.error('[CvPdfService]', err);
-      this.failed.set(true);
+      tab.close();
+      this.error.set('cv.error');
     } finally {
       this.busy.set(false);
+    }
+  }
+
+  /** Message d'attente dans l'onglet encore vide, le temps de générer le PDF. */
+  private showPlaceholder(tab: Window): void {
+    try {
+      tab.document.title = `CV — ${CONTACT.name}`;
+      tab.document.body.style.cssText = 'font:16px system-ui,sans-serif;color:#555;display:grid;place-items:center;min-height:90vh;margin:0';
+      tab.document.body.textContent = this.i18n.t('cv.generating');
+    } catch {
+      /* onglet inaccessible : sans conséquence, le PDF le remplacera */
     }
   }
 
