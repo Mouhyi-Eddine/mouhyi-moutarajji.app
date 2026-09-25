@@ -13,6 +13,8 @@ export interface CvContent {
   siteUrl: string;
   siteLabel: string;
   yearsLabel: string | null;
+  /** « Disponible à partir du 1er octobre 2026 », ou null si aucune date à venir. */
+  availability: string | null;
   profile: string[];
   skills: { name: string; items: string[] }[];
   languages: { name: string; items: string[] } | null;

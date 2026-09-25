@@ -61,6 +61,12 @@ header.nav{position:fixed; top:0; left:0; right:0; z-index:50; padding-top:env(s
 .hero{padding:150px 0 90px;}
 .hero .kicker{color:var(--accent); font-family:'IBM Plex Mono', monospace; font-size:.82rem; display:flex; align-items:center; gap:10px; margin-bottom:22px;}
 .hero .kicker::before{content:""; width:22px; height:1px; background:var(--accent);}
+/* Badge de disponibilité (masqué si la date est vide ou passée). */
+.availability{display:inline-flex; align-items:center; gap:9px; margin-bottom:20px; padding:6px 14px 6px 12px; border-radius:999px;
+  font-size:.85rem; font-weight:500; color:#8EE3B5; background:rgba(94,211,146,.1); border:1px solid rgba(94,211,146,.4);}
+.availability-dot{width:8px; height:8px; border-radius:50%; background:#5ED392; box-shadow:0 0 0 0 rgba(94,211,146,.6); animation:availability-pulse 2.4s ease-out infinite;}
+@keyframes availability-pulse{0%{box-shadow:0 0 0 0 rgba(94,211,146,.55);} 70%,100%{box-shadow:0 0 0 7px rgba(94,211,146,0);}}
+@media (prefers-reduced-motion:reduce){.availability-dot{animation:none;}}
 .hero h1{font-size:clamp(2.1rem, 5vw, 3.3rem); line-height:1.08; max-width:15ch;}
 .hero p.lead{margin-top:22px; max-width:56ch; color:var(--ink-dim); font-size:1.08rem;}
 .hero .cta-row{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap;}
@@ -116,8 +122,26 @@ section{padding:88px 0; border-top:1px solid var(--line-soft);}
 .exp-bullets{list-style:none; display:grid; gap:8px; max-width:64ch; margin-bottom:16px;}
 .exp-bullets li{position:relative; padding-left:18px; color:var(--ink-dim); font-size:.92rem;}
 .exp-bullets li::before{content:"—"; position:absolute; left:0; color:var(--line);}
-.exp-tags{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px;}
-.exp-tags span{font-family:'IBM Plex Mono', monospace; font-size:.72rem; padding:4px 9px; border-radius:var(--radius); border:1px solid var(--line-soft); color:var(--ink-dimmer);}
+.exp-tags{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; list-style:none;}
+/* Technos cliquables : filtrent la liste des missions (aria-pressed = filtre actif). */
+.tag{font-family:'IBM Plex Mono', monospace; font-size:.72rem; line-height:1.4; padding:4px 9px; border-radius:var(--radius);
+  border:1px solid var(--line-soft); background:transparent; color:var(--ink-dimmer); cursor:pointer; transition:color .15s, border-color .15s, background .15s;}
+.tag:hover{color:var(--accent); border-color:var(--accent);}
+.tag:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.tag.active{color:#04141F; background:var(--accent); border-color:var(--accent); font-weight:600;}
+.exp-filter-hint{margin:-30px 0 30px; font-size:.82rem; color:var(--ink-dimmer);}
+/* Barre du filtre actif : collante sous le menu tant que la section est à l'écran. */
+.exp-filter{position:sticky; top:calc(72px + env(safe-area-inset-top,0px)); z-index:10; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 16px;
+  margin:-30px 0 30px; padding:10px 12px 10px 16px; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:var(--radius);
+  background:var(--bg-alt); box-shadow:0 8px 24px rgba(4,20,31,.45);}
+.exp-filter-label{display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.88rem; color:var(--ink-dim);}
+.exp-filter-label .tag{cursor:default;}
+.exp-filter-count{font-family:'IBM Plex Mono', monospace; font-size:.8rem; color:var(--ink-dimmer);}
+.exp-filter-reset{font:inherit; font-size:.85rem; padding:6px 12px; border-radius:var(--radius); border:1px solid var(--accent); background:transparent; color:var(--accent); cursor:pointer;}
+.exp-filter-reset:hover{background:var(--accent-soft);}
+.exp-filter-reset:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.section-head h2[tabindex="-1"]:focus{outline:none;}
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;}
 .toggle-btn{font-family:'IBM Plex Sans', sans-serif; font-size:.85rem; color:var(--accent); background:none; border:none; cursor:pointer; padding:6px 0; margin:-6px 0; /* cible >= 24px sans décaler la mise en page */ display:inline-flex; align-items:center; gap:6px;}
 .toggle-btn .chev{transition:transform .2s; display:inline-block;}
 .toggle-btn.open .chev{transform:rotate(180deg);}

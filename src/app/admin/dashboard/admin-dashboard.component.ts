@@ -3,22 +3,23 @@ import { Meta } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { formatPeriod } from '../../core/period';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
-import { Agency, Experience, SkillGroup } from '../../models/portfolio.models';
+import { Agency, Education, Experience, SkillGroup } from '../../models/portfolio.models';
 import { AdminAuthService } from '../admin-auth.service';
 import { AdminDataService } from '../admin-data.service';
 import { AdminPath } from '../admin-path';
 import { describeWriteError } from '../firestore-error';
 import { nextFreeOrder } from '../form-utils';
 import { AgencyFormComponent } from './agency-form.component';
+import { EducationFormComponent } from './education-form.component';
 import { ExperienceFormComponent } from './experience-form.component';
 import { ProfileFormComponent } from './profile-form.component';
 import { SkillGroupFormComponent } from './skill-group-form.component';
 
-type Tab = 'experiences' | 'skills' | 'agencies' | 'profile';
+type Tab = 'experiences' | 'skills' | 'education' | 'agencies' | 'profile';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [RouterLink, ExperienceFormComponent, SkillGroupFormComponent, AgencyFormComponent, ProfileFormComponent],
+  imports: [RouterLink, ExperienceFormComponent, SkillGroupFormComponent, EducationFormComponent, AgencyFormComponent, ProfileFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: '../admin.css',
   template: `
@@ -41,6 +42,9 @@ type Tab = 'experiences' | 'skills' | 'agencies' | 'profile';
         </button>
         <button type="button" role="tab" [attr.aria-selected]="tab() === 'skills'" (click)="selectTab('skills')">
           Compétences ({{ skillGroups().length }})
+        </button>
+        <button type="button" role="tab" [attr.aria-selected]="tab() === 'education'" (click)="selectTab('education')">
+          Formation ({{ education().length }})
         </button>
         <button type="button" role="tab" [attr.aria-selected]="tab() === 'agencies'" (click)="selectTab('agencies')">
           Sociétés de conseil ({{ agencies().length }})
@@ -110,6 +114,31 @@ type Tab = 'experiences' | 'skills' | 'agencies' | 'profile';
             }
           </div>
         }
+        @case ('education') {
+          @if (editingEducation(); as item) {
+            <app-education-form [education]="item" (done)="editingEducation.set(null)" />
+          } @else {
+            <div class="actions" style="margin-bottom:16px">
+              <button class="btn-sm primary" type="button" (click)="newEducation()">+ Nouvelle formation</button>
+            </div>
+          }
+          <div class="list">
+            @for (item of education(); track item.id) {
+              <div class="row">
+                <div>
+                  <strong>{{ item.titleFr }}</strong> — {{ item.school }}
+                  <div class="meta">{{ item.date }} · ordre {{ item.order }}</div>
+                </div>
+                <div class="actions">
+                  <button class="btn-sm" type="button" (click)="editingEducation.set(item)">Modifier</button>
+                  <button class="btn-sm danger" type="button" (click)="deleteEducation(item)">Supprimer</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="muted">Aucune formation.</p>
+            }
+          </div>
+        }
         @case ('agencies') {
           @if (editingAgency(); as agency) {
             <app-agency-form [agency]="agency" (done)="editingAgency.set(null)" />
@@ -152,11 +181,13 @@ export class AdminDashboardComponent {
   readonly tab = signal<Tab>('experiences');
   readonly editingExperience = signal<Experience | null>(null);
   readonly editingSkillGroup = signal<SkillGroup | null>(null);
+  readonly editingEducation = signal<Education | null>(null);
   readonly editingAgency = signal<Agency | null>(null);
   readonly error = signal<string | null>(null);
 
   readonly experiences = computed(() => [...this.data.experiences()].sort((a, b) => b.order - a.order));
   readonly skillGroups = computed(() => [...this.data.skillGroups()].sort((a, b) => a.order - b.order));
+  readonly education = computed(() => [...this.data.education()].sort((a, b) => b.order - a.order));
   readonly agencies = computed(() => [...this.data.agencies()].sort((a, b) => b.order - a.order));
 
   constructor() {
@@ -171,11 +202,20 @@ export class AdminDashboardComponent {
     this.tab.set(tab);
     this.editingExperience.set(null);
     this.editingSkillGroup.set(null);
+    this.editingEducation.set(null);
     this.editingAgency.set(null);
   }
 
   agencyPeriod(agency: Agency): string {
     return agency.start ? formatPeriod(agency.start, agency.end, 'fr', false) : (agency.date ?? '?');
+  }
+
+  newEducation(): void {
+    this.editingEducation.set({ id: '', titleFr: '', titleEn: '', school: '', date: '', order: nextFreeOrder(this.education().map((d) => d.order)) });
+  }
+
+  deleteEducation(item: Education): Promise<void> {
+    return this.confirmAndRun(`Supprimer la formation « ${item.titleFr} » ?`, () => this.admin.deleteEducation(item.id));
   }
 
   newAgency(): void {

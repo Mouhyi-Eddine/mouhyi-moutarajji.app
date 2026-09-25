@@ -49,5 +49,8 @@ label:has(> input.ng-invalid), label:has(> textarea.ng-invalid), label:has(> inp
 .req{color:var(--danger); font-weight:600;}
 .hint{color:var(--ink-dimmer); font-size:.78rem;}
 .error{color:var(--danger); font-size:.8rem;}
+.warn{color:var(--amber); font-size:.8rem;}
+label > .warn{display:block; margin-top:6px;}
+.field-action{display:flex; align-items:center; padding-top:22px;}
 .form-status{color:var(--ink-dimmer); font-size:.8rem; align-self:center;}
 .skill-line{display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;}

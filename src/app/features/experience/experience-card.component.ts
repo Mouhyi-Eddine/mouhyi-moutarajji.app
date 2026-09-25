@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, input, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input, output, signal, computed } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
 import { RevealDirective } from '../../core/reveal.directive';
 import { Experience } from '../../models/portfolio.models';
+import { ExperienceFilterService } from './experience-filter.service';
 
 @Component({
   selector: 'app-experience-card',
@@ -37,16 +38,22 @@ import { Experience } from '../../models/portfolio.models';
           </span>
         </button>
       }
-      <div class="exp-tags">
+      <!-- Chaque techno est un bouton bascule : filtre les missions qui l'utilisent. -->
+      <ul class="exp-tags" [attr.aria-label]="i18n.t('exp.techList')">
         @for (tag of exp().tags; track tag) {
-          <span>{{ tag }}</span>
+          <li>
+            <button type="button" class="tag" [class.active]="filter.isActive(tag)" [attr.aria-pressed]="filter.isActive(tag)"
+                    [attr.aria-label]="i18n.t('exp.filterByTag', { tag })" (click)="tagClick.emit(tag)">{{ tag }}</button>
+          </li>
         }
-      </div>
+      </ul>
     </article>
   `,
 })
 export class ExperienceCardComponent {
   readonly exp = input.required<Experience>();
+  readonly tagClick = output<string>();
+  readonly filter = inject(ExperienceFilterService);
   readonly expanded = signal(false);
 
   constructor(readonly i18n: I18nService) {}

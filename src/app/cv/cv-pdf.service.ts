@@ -80,6 +80,7 @@ export class CvPdfService {
     const t = (key: string, vars?: Record<string, string | number>) => this.i18n.t(key, vars, lang);
     const pick = (fr: string, en: string) => this.i18n.pick(fr, en, lang);
     const years = this.data.yearsOfExperience();
+    const available = this.data.availableFrom();
     const profile = this.data.profile();
     const groups = [...this.data.skillGroups()].sort((a, b) => a.order - b.order);
     const languages = groups.find((g) => g.id === 'languages');
@@ -94,6 +95,7 @@ export class CvPdfService {
       siteUrl: CONTACT.siteUrl,
       siteLabel: CONTACT.siteLabel,
       yearsLabel: years === null ? null : t('hero.years', { years }),
+      availability: available ? t('hero.available', { date: this.i18n.day(available, lang) }) : null,
       profile: [profileText(profile, 'aboutP1', lang, years), profileText(profile, 'aboutP2', lang, years)],
       skills: groups
         .filter((g) => g !== languages)

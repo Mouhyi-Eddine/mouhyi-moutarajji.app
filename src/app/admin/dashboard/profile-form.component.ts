@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
+import { formatDay, upcomingAvailability } from '../../core/availability';
 import { DEFAULT_PROFILE } from '../../core/profile-defaults';
-import { Profile } from '../../models/portfolio.models';
+import { Profile, ProfileTexts } from '../../models/portfolio.models';
 import { AdminDataService } from '../admin-data.service';
 import { describeWriteError } from '../firestore-error';
 
 /**
  * Édition de la section « Profil » du site public (document profile/main).
  * Tant que le document n'existe pas, le formulaire part des textes par défaut.
+ * La date de disponibilité est facultative : vide ou passée, aucun badge n'est affiché.
  */
 @Component({
   selector: 'app-profile-form',
@@ -26,6 +28,31 @@ import { describeWriteError } from '../firestore-error';
         @if (!data.profile()) { Aucun profil enregistré : les textes ci-dessous sont ceux affichés par défaut. }
       </p>
 
+      <p class="muted">Disponibilité (badge dans l'en-tête du site et sur le CV)</p>
+      <div class="grid-2">
+        <label>
+          Disponible à partir du
+          <input type="date" formControlName="availableFrom" />
+          @switch (availabilityState()) {
+            @case ('shown') {
+              <span class="hint">Badge affiché : « {{ availabilityPreview() }} » (« Available from … » en anglais).</span>
+            }
+            @case ('past') {
+              <span class="warn">Date passée : le badge n'est plus affiché. Mettez-la à jour ou retirez-la.</span>
+            }
+            @default {
+              <span class="hint">Laisser vide pour ne pas afficher de badge.</span>
+            }
+          }
+        </label>
+        <div class="field-action">
+          <button class="btn-sm" type="button" (click)="clearAvailability()" [disabled]="!form.controls.availableFrom.value">
+            Retirer la date
+          </button>
+        </div>
+      </div>
+
+      <p class="muted">Textes de la section Profil</p>
       <div class="grid-pairs">
         <label>Présentation — paragraphe 1 (FR) <span class="req">*</span><textarea formControlName="aboutP1Fr"></textarea></label>
         <label>Presentation — paragraph 1 (EN) <span class="req">*</span><textarea formControlName="aboutP1En"></textarea></label>
@@ -73,22 +100,40 @@ export class ProfileFormComponent {
   readonly saved = signal(false);
 
   private readonly fb = inject(NonNullableFormBuilder);
-  readonly form = this.fb.group(
-    Object.fromEntries(Object.keys(DEFAULT_PROFILE).map((k) => [k, ['', Validators.required]])) as {
-      [K in keyof Profile]: [string, typeof Validators.required];
-    },
-  );
+  readonly form = this.fb.group({
+    ...(Object.fromEntries(Object.keys(DEFAULT_PROFILE).map((k) => [k, ['', Validators.required]])) as {
+      [K in keyof ProfileTexts]: [string, typeof Validators.required];
+    }),
+    availableFrom: ['', Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)],
+  });
 
   constructor() {
     // Valeurs enregistrées, sinon textes par défaut (champ par champ).
     effect(() => {
       const current = this.data.profile();
-      this.form.reset({ ...DEFAULT_PROFILE, ...stripEmpty(current) });
+      this.form.reset({ ...DEFAULT_PROFILE, availableFrom: '', ...stripEmpty(current) });
     });
   }
 
+  /** 'shown' : badge visible ; 'past' : date renseignée mais passée ; 'none' : pas de date. */
+  availabilityState(): 'shown' | 'past' | 'none' {
+    const value = this.form.controls.availableFrom.value;
+    return !value ? 'none' : upcomingAvailability(value) ? 'shown' : 'past';
+  }
+
+  availabilityPreview(): string {
+    return `Disponible à partir du ${formatDay(this.form.controls.availableFrom.value, 'fr')}`;
+  }
+
+  clearAvailability(): void {
+    this.form.controls.availableFrom.setValue('');
+    this.form.markAsDirty();
+    this.saved.set(false);
+  }
+
+  /** Rétablit les textes seulement : la date de disponibilité n'est pas touchée. */
   resetToDefaults(): void {
-    this.form.setValue({ ...DEFAULT_PROFILE });
+    this.form.patchValue({ ...DEFAULT_PROFILE });
     this.form.markAsDirty();
     this.saved.set(false);
   }

@@ -1,5 +1,6 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { Lang } from '../models/portfolio.models';
+import { formatDay } from './availability';
 import { formatMonth, formatPeriod } from './period';
 
 const STR: Record<Lang, Record<string, string>> = {
@@ -16,6 +17,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'hero.title': 'Ingénieur logiciel · Développeur Web Fullstack',
     'hero.lead':
       "Reprendre l'existant, comprendre pourquoi il tient debout, et le faire avancer sans rien casser — c'est le fil rouge de mes missions pour la RATP, la CNAF, la SNCF, VINCI et d'autres.",
+    'hero.available': 'Disponible à partir du {date}',
     'hero.cta1': 'Voir les expériences',
     'hero.cta2': 'Me contacter',
     'timeline.label': 'Chronologie : {n} missions de {from} à aujourd’hui ({companies}).',
@@ -27,6 +29,17 @@ const STR: Record<Lang, Record<string, string>> = {
     'exp.showMore': 'Voir les {n} autres réalisations',
     'exp.showMoreOne': "Voir l'autre réalisation",
     'exp.showLess': 'Réduire',
+    'exp.techList': 'Technologies utilisées',
+    'exp.filterHint': 'Cliquez sur une technologie pour ne voir que les missions qui l’utilisent.',
+    'exp.filterByTag': 'Filtrer les missions par {tag}',
+    'exp.filterBy': 'Missions avec',
+    'exp.filterCount': '{n} sur {total}',
+    'exp.filterCountOne': '1 sur {total}',
+    'exp.filterReset': 'Tout afficher',
+    'exp.filterResetLabel': 'Retirer le filtre {tag} et afficher toutes les missions',
+    'exp.filterAnnounce': '{n} missions utilisent {tag}.',
+    'exp.filterAnnounceOne': '1 mission utilise {tag}.',
+    'exp.filterCleared': 'Filtre retiré : les {total} missions sont affichées.',
     'edu.title': 'Formation',
     'agency.title': 'Sociétés de conseil',
     'contact.title': 'Discutons de votre projet.',
@@ -55,6 +68,7 @@ const STR: Record<Lang, Record<string, string>> = {
     'hero.title': 'Software Engineer · Full-Stack Web Developer',
     'hero.lead':
       "Taking over existing systems, understanding what keeps them standing, and moving them forward without breaking anything — that's the common thread of my work for RATP, CNAF, SNCF, VINCI and others.",
+    'hero.available': 'Available from {date}',
     'hero.cta1': 'See my experience',
     'hero.cta2': 'Get in touch',
     'timeline.label': 'Timeline: {n} assignments from {from} to today ({companies}).',
@@ -66,6 +80,17 @@ const STR: Record<Lang, Record<string, string>> = {
     'exp.showMore': 'Show {n} more achievements',
     'exp.showMoreOne': 'Show 1 more achievement',
     'exp.showLess': 'Show less',
+    'exp.techList': 'Technologies used',
+    'exp.filterHint': 'Click a technology to see only the assignments that use it.',
+    'exp.filterByTag': 'Filter assignments by {tag}',
+    'exp.filterBy': 'Assignments with',
+    'exp.filterCount': '{n} of {total}',
+    'exp.filterCountOne': '1 of {total}',
+    'exp.filterReset': 'Show all',
+    'exp.filterResetLabel': 'Remove the {tag} filter and show all assignments',
+    'exp.filterAnnounce': '{n} assignments use {tag}.',
+    'exp.filterAnnounceOne': '1 assignment uses {tag}.',
+    'exp.filterCleared': 'Filter cleared: all {total} assignments are shown.',
     'edu.title': 'Education',
     'agency.title': 'Consulting firms',
     'contact.title': "Let's talk about your project.",
@@ -144,6 +169,11 @@ export class I18nService {
   month(value: string, lang: Lang = this.lang()): string {
     const m = /^(\d{2})\/(\d{4})$/.exec(value);
     return formatMonth(m ? `${m[2]}-${m[1]}` : value, lang);
+  }
+
+  /** Jour localisé : '2026-10-01' → '1er octobre 2026' (FR) / 'October 1, 2026' (EN). */
+  day(value: string, lang: Lang = this.lang()): string {
+    return formatDay(value, lang);
   }
 }
 

@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
   afterNextRender,
   computed,
   inject,
@@ -11,6 +12,7 @@ import {
 import { I18nService } from '../../core/i18n.service';
 import { formatPeriod } from '../../core/period';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
+import { ExperienceFilterService } from '../experience/experience-filter.service';
 
 /**
  * Géométrie (px, repère = largeur réelle du conteneur : le texte garde sa taille sur mobile).
@@ -68,7 +70,7 @@ function shortName(company: string): string {
             </g>
           }
           @for (bar of l.bars; track bar.id) {
-            <a class="mission" [attr.href]="'#exp-' + bar.id" [attr.aria-label]="bar.ariaLabel" [style.--d]="bar.delay + 'ms'">
+            <a class="mission" [attr.href]="'#exp-' + bar.id" (click)="openMission($event, bar.id)" [attr.aria-label]="bar.ariaLabel" [style.--d]="bar.delay + 'ms'">
               <title>{{ bar.ariaLabel }}</title>
               @if (bar.label; as lb) {
                 <line class="leader" [attr.x1]="lb.lineX" [attr.x2]="lb.lineX" [attr.y1]="lb.y + 4" [attr.y2]="trackY - bar_h / 2 - 1" />
@@ -127,6 +129,8 @@ function shortName(company: string): string {
 export class HeroTimelineComponent {
   private readonly data = inject(PortfolioDataService);
   private readonly i18n = inject(I18nService);
+  private readonly filter = inject(ExperienceFilterService);
+  private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly height = HEIGHT;
@@ -200,6 +204,24 @@ export class HeroTimelineComponent {
     });
     return { width, ticks, bars, summary };
   });
+
+  /**
+   * Lien vers une mission : si le filtre par techno la masque, on retire le
+   * filtre puis on fait défiler une fois la carte réaffichée (sinon lien natif).
+   */
+  openMission(event: MouseEvent, id: string): void {
+    const exp = this.data.experiences().find((e) => e.id === id);
+    if (!exp || this.filter.matches(exp)) return;
+    event.preventDefault();
+    this.filter.clear();
+    afterNextRender(
+      () => {
+        document.getElementById(`exp-${id}`)?.scrollIntoView();
+        history.replaceState(history.state, '', `#exp-${id}`);
+      },
+      { injector: this.injector },
+    );
+  }
 
   constructor() {
     const destroyRef = inject(DestroyRef);

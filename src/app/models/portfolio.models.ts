@@ -75,6 +75,14 @@ export interface Profile {
   statMissionsEn: string;
   statLanguagesFr: string;
   statLanguagesEn: string;
+  /**
+   * Date de disponibilité 'YYYY-MM-DD'. Vide, absente ou passée = pas de badge
+   * (site et CV). Facultative : les documents existants restent valides.
+   */
+  availableFrom?: string;
 }
+
+/** Textes de la section Profil (tout sauf la disponibilité). */
+export type ProfileTexts = Omit<Profile, 'availableFrom'>;
 
 export type Lang = 'fr' | 'en';

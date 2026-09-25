@@ -2,6 +2,7 @@ import { Injectable, computed, inject, isDevMode, signal } from '@angular/core';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore/lite';
 import { Agency, Education, Experience, Profile, SkillGroup } from '../models/portfolio.models';
 import { COLLECTIONS, PROFILE_DOC_ID } from './collections';
+import { upcomingAvailability } from './availability';
 import { FIRESTORE } from './firebase';
 import { yearsSince } from './period';
 
@@ -60,6 +61,9 @@ export class PortfolioDataService {
     const oldest = this._experiences().map((e) => e.start).filter(Boolean).sort()[0];
     return oldest ? yearsSince(oldest) : null;
   });
+
+  /** Date de disponibilité à venir ('YYYY-MM-DD'), ou null : rien à afficher. */
+  readonly availableFrom = computed(() => upcomingAvailability(this._profile()?.availableFrom));
 
   constructor() {
     void this.loadSnapshot();

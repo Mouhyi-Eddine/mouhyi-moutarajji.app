@@ -12,6 +12,12 @@ import { HeroTimelineComponent } from './hero-timeline.component';
   template: `
     <section class="hero" id="top">
       <div class="wrap">
+        @if (data.availableFrom(); as date) {
+          <p class="availability">
+            <span class="availability-dot" aria-hidden="true"></span>
+            {{ i18n.t('hero.available', { date: i18n.day(date) }) }}
+          </p>
+        }
         <p class="kicker">
           <span>{{ i18n.t('hero.role') }}@if (data.yearsOfExperience(); as years) { · {{ i18n.t('hero.years', { years }) }}}</span>
         </p>

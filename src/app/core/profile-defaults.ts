@@ -1,4 +1,4 @@
-import { Lang, Profile } from '../models/portfolio.models';
+import { Lang, Profile, ProfileTexts } from '../models/portfolio.models';
 import { interpolate } from './i18n.service';
 
 /**
@@ -6,7 +6,7 @@ import { interpolate } from './i18n.service';
  * Firestore `profile/main` n'existe pas (ou pour un champ laissé vide).
  * Le panel admin part de ces valeurs à la première édition.
  */
-export const DEFAULT_PROFILE: Profile = {
+export const DEFAULT_PROFILE: ProfileTexts = {
   aboutP1Fr:
     "Ingénieur en informatique avec {years} ans d'expérience, j'ai construit une expertise solide sur le développement logiciel et la gestion de projets, principalement sur des applications métier en environnement Java / Angular.",
   aboutP1En:
@@ -27,7 +27,7 @@ type ProfileText = 'aboutP1' | 'aboutP2' | 'statYears' | 'statMissions' | 'statL
 
 /** Texte du profil dans la langue demandée : valeur Firestore, sinon valeur par défaut. */
 export function profileText(profile: Profile | null, key: ProfileText, lang: Lang, years: number | null): string {
-  const field = `${key}${lang === 'en' ? 'En' : 'Fr'}` as keyof Profile;
+  const field = `${key}${lang === 'en' ? 'En' : 'Fr'}` as keyof ProfileTexts;
   const text = profile?.[field]?.trim() || DEFAULT_PROFILE[field];
   return interpolate(text, { years: years ?? '—' });
 }

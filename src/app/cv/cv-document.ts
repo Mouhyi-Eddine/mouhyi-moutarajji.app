@@ -130,7 +130,8 @@ function content(cv: CvContent): Content[] {
           margin: [M, 28, M, 22],
           stack: [
             { text: cv.name, fontSize: 22, bold: true, color: '#FFFFFF' },
-            { text: [cv.title, cv.yearsLabel ? `  ·  ${cv.yearsLabel}` : ''], fontSize: 11, color: '#9FD8EC', margin: [0, 4, 0, 10] },
+            { text: [cv.title, cv.yearsLabel ? `  ·  ${cv.yearsLabel}` : ''], fontSize: 11, color: '#9FD8EC', margin: [0, 4, 0, cv.availability ? 5 : 10] },
+            cv.availability ? { text: cv.availability, fontSize: 9, bold: true, color: '#8EE3B5', margin: [0, 0, 0, 9] } : '',
             { text: [contact.email, '   ·   ', cv.location], fontSize: 8.5, color: '#C9D6E0' },
             { text: [contact.linkedin, '   ·   ', contact.site], fontSize: 8.5, color: '#C9D6E0', margin: [0, 2, 0, 0] },
           ],
