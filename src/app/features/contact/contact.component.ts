@@ -1,9 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { CONTACT } from '../../core/contact';
 import { I18nService } from '../../core/i18n.service';
+import { CvDownloadButtonComponent } from '../../cv/cv-download-button.component';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
+  imports: [CvDownloadButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="contact">
@@ -11,14 +14,14 @@ import { I18nService } from '../../core/i18n.service';
         <div class="contact-box">
           <h2>{{ i18n.t('contact.title') }}</h2>
           <div class="contact-links">
-            <a href="mailto:moutarajji.mouhyi@gmail.com" [attr.aria-label]="i18n.t('contact.mailLabel')">
+            <a [href]="'mailto:' + contact.email" [attr.aria-label]="i18n.t('contact.mailLabel')">
               <svg class="contact-icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
                 <path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="1.8"/>
                 <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>moutarajji.mouhyi&#64;gmail.com</span>
+              <span>{{ contact.email }}</span>
             </a>
-            <a href="https://www.linkedin.com/in/mouhyi-moutarajji-47801814b" target="_blank" rel="noopener"
+            <a [href]="contact.linkedinUrl" target="_blank" rel="noopener"
                [attr.aria-label]="i18n.t('contact.linkedinLabel')">
               <svg class="contact-icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
                 <rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
@@ -26,6 +29,7 @@ import { I18nService } from '../../core/i18n.service';
               </svg>
               <span>LinkedIn</span>
             </a>
+            <app-cv-download-button />
           </div>
         </div>
       </div>
@@ -33,5 +37,7 @@ import { I18nService } from '../../core/i18n.service';
   `,
 })
 export class ContactComponent {
+  readonly contact = CONTACT;
+
   constructor(readonly i18n: I18nService) {}
 }

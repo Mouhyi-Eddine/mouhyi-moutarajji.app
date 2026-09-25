@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { I18nService } from '../../core/i18n.service';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
+import { CvDownloadButtonComponent } from '../../cv/cv-download-button.component';
 import { HeroTimelineComponent } from './hero-timeline.component';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [HeroTimelineComponent],
+  imports: [HeroTimelineComponent, CvDownloadButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="hero" id="top">
@@ -18,6 +19,7 @@ import { HeroTimelineComponent } from './hero-timeline.component';
         <p class="lead">{{ i18n.t('hero.lead') }}</p>
         <div class="cta-row">
           <a href="#experience" class="btn btn-primary">{{ i18n.t('hero.cta1') }}</a>
+          <app-cv-download-button />
           <a href="#contact" class="btn btn-ghost">{{ i18n.t('hero.cta2') }}</a>
         </div>
         <app-hero-timeline />

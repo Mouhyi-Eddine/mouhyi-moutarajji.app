@@ -35,6 +35,11 @@ const STR: Record<Lang, Record<string, string>> = {
     'footer': 'Mouhyi Eddine Moutarajji — Rennes, France',
     'skip.link': 'Aller au contenu',
     'data.error': 'Le contenu détaillé est momentanément indisponible. Merci de réessayer dans quelques instants.',
+    'cv.download': 'Télécharger le CV',
+    'cv.downloadLabel': 'Télécharger le CV au format PDF',
+    'cv.generating': 'Génération du PDF…',
+    'cv.error': 'La génération du PDF a échoué. Merci de réessayer.',
+    'cv.techStack': 'Environnement technique',
   },
   en: {
     'nav.about': 'Profile',
@@ -68,6 +73,10 @@ const STR: Record<Lang, Record<string, string>> = {
     'footer': 'Mouhyi Eddine Moutarajji — Rennes, France',
     'skip.link': 'Skip to content',
     'data.error': 'Some content is temporarily unavailable. Please try again in a moment.',
+    'cv.download': 'Download CV (French)',
+    'cv.downloadLabel': 'Download my CV as a PDF (in French)',
+    'cv.generating': 'Generating PDF…',
+    'cv.error': "Couldn't generate the PDF. Please try again.",
   },
 };
 
@@ -115,24 +124,24 @@ export class I18nService {
   }
 
   /** Traduction d'une clé statique, avec interpolation simple {n}. */
-  t(key: string, vars?: Record<string, string | number>): string {
-    return interpolate(STR[this.lang()][key] ?? STR.fr[key] ?? key, vars);
+  t(key: string, vars?: Record<string, string | number>, lang: Lang = this.lang()): string {
+    return interpolate(STR[lang][key] ?? STR.fr[key] ?? key, vars);
   }
 
   /** Choisit le champ FR ou EN selon la langue courante. */
-  pick(fr: string, en: string): string {
-    return this.lang() === 'en' ? en : fr;
+  pick(fr: string, en: string, lang: Lang = this.lang()): string {
+    return lang === 'en' ? en : fr;
   }
 
   /** Période localisée ; `legacy` = ancien libellé texte des documents pas encore migrés. */
-  period(start: string | undefined, end: string | null | undefined, legacy?: string, withDuration = true): string {
-    return start ? formatPeriod(start, end ?? null, this.lang(), withDuration) : (legacy ?? '');
+  period(start: string | undefined, end: string | null | undefined, legacy?: string, withDuration = true, lang: Lang = this.lang()): string {
+    return start ? formatPeriod(start, end ?? null, lang, withDuration) : (legacy ?? '');
   }
 
   /** Mois isolé localisé : '10/2019' ou '2019-10' → '10/2019' (FR) / 'Oct 2019' (EN). */
-  month(value: string): string {
+  month(value: string, lang: Lang = this.lang()): string {
     const m = /^(\d{2})\/(\d{4})$/.exec(value);
-    return formatMonth(m ? `${m[2]}-${m[1]}` : value, this.lang());
+    return formatMonth(m ? `${m[2]}-${m[1]}` : value, lang);
   }
 }
 

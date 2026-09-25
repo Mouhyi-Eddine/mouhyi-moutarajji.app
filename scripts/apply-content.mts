@@ -1,12 +1,13 @@
 /**
- * Pousse dans Firestore les textes anglais relus (scripts/content-en.ts).
- * Seuls les champs anglais sont modifiés ; les textes français ne sont jamais touchés.
+ * Pousse dans Firestore les textes relus : anglais (scripts/content-en.ts) et
+ * français harmonisé (scripts/content-fr.ts). Seuls les champs listés dans ces
+ * fichiers sont modifiés (intitulés, contextes EN, réalisations, diplômes EN…).
  *
- *   npm run apply:en-content -- --dry-run   # affiche les différences, sans identifiants
- *   npm run apply:en-content                # écrit (ADMIN_EMAIL / ADMIN_PASSWORD dans .env)
+ *   npm run apply:content -- --dry-run   # affiche les différences, sans identifiants
+ *   npm run apply:content                # écrit (ADMIN_EMAIL / ADMIN_PASSWORD dans .env)
  *
  * Garde-fou : si une expérience a changé depuis la relecture (nombre de
- * réalisations FR différent de la version EN relue), elle est ignorée et signalée.
+ * réalisations FR ou EN différent de la version relue), elle est ignorée et signalée.
  */
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -14,6 +15,7 @@ import { collection, doc, getDocs, getFirestore, writeBatch } from 'firebase/fir
 import { COLLECTIONS } from '../src/app/core/collections.ts';
 import { environment } from '../src/environments/environment.ts';
 import { AGENCIES_EN, EDUCATION_EN, EXPERIENCES_EN, SKILL_GROUPS_EN } from './content-en.ts';
+import { AGENCIES_FR, EXPERIENCES_FR } from './content-fr.ts';
 
 const dryRun = process.argv.includes('--dry-run');
 const app = initializeApp(environment.firebase);
@@ -37,18 +39,20 @@ function diff(collectionName: string, id: string, current: Record<string, unknow
 }
 
 for (const d of (await getDocs(collection(db, COLLECTIONS.experiences))).docs) {
-  const next = EXPERIENCES_EN[d.id];
-  if (!next) continue;
+  const en = EXPERIENCES_EN[d.id];
+  const fr = EXPERIENCES_FR[d.id];
+  if (!en && !fr) continue;
+  const next = { ...en, ...fr };
   const data = d.data();
-  const frCount = (data['bulletsFr'] as string[] | undefined)?.length ?? 0;
-  if (frCount !== next.bulletsEn.length) {
-    skipped.push(`experiences/${d.id} : ${frCount} réalisations FR, ${next.bulletsEn.length} EN relues`);
+  const count = (k: string) => (data[k] as string[] | undefined)?.length ?? 0;
+  if ((en && count('bulletsEn') !== en.bulletsEn.length) || (fr && count('bulletsFr') !== fr.bulletsFr.length)) {
+    skipped.push(`experiences/${d.id} : ${count('bulletsFr')} réalisations FR / ${count('bulletsEn')} EN en base, version relue différente`);
     continue;
   }
   diff(COLLECTIONS.experiences, d.id, data, next);
 }
 for (const d of (await getDocs(collection(db, COLLECTIONS.agencies))).docs) {
-  if (AGENCIES_EN[d.id]) diff(COLLECTIONS.agencies, d.id, d.data(), AGENCIES_EN[d.id]);
+  if (AGENCIES_EN[d.id] || AGENCIES_FR[d.id]) diff(COLLECTIONS.agencies, d.id, d.data(), { ...AGENCIES_EN[d.id], ...AGENCIES_FR[d.id] });
 }
 for (const d of (await getDocs(collection(db, COLLECTIONS.education))).docs) {
   if (EDUCATION_EN[d.id]) diff(COLLECTIONS.education, d.id, d.data(), EDUCATION_EN[d.id]);
@@ -79,6 +83,6 @@ await signInWithEmailAndPassword(auth, email, password);
 const batch = writeBatch(db);
 for (const u of updates) batch.update(doc(db, u.collection, u.id), u.fields);
 await batch.commit();
-console.log('Textes anglais mis à jour.');
+console.log('Textes mis à jour.');
 await signOut(auth);
 process.exit(0);

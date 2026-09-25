@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { formatPeriod } from '../../core/period';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
 import { Agency, Experience, SkillGroup } from '../../models/portfolio.models';
@@ -18,17 +18,21 @@ type Tab = 'experiences' | 'skills' | 'agencies' | 'profile';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [ExperienceFormComponent, SkillGroupFormComponent, AgencyFormComponent, ProfileFormComponent],
+  imports: [RouterLink, ExperienceFormComponent, SkillGroupFormComponent, AgencyFormComponent, ProfileFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: '../admin.css',
   template: `
     <div class="panel">
+      <a class="back-link" routerLink="/">← Retour au portfolio</a>
       <div class="panel-head">
         <div>
           <h1>Administration du portfolio</h1>
           <span class="muted">Connecté : {{ auth.user()?.email }}</span>
         </div>
-        <button class="btn-sm" type="button" (click)="logout()">Se déconnecter</button>
+        <div class="actions">
+          <a class="btn-sm" routerLink="/" target="_blank" rel="noopener">Voir le site ↗</a>
+          <button class="btn-sm" type="button" (click)="logout()">Se déconnecter</button>
+        </div>
       </div>
 
       <div class="tabs" role="tablist">

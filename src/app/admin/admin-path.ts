@@ -14,7 +14,7 @@ import { CanMatchFn, UrlMatcher } from '@angular/router';
  * C'est de la discrétion, pas la sécurité : celle-ci repose sur Firebase Auth
  * et les règles Firestore.
  */
-const ADMIN_SEGMENT_SHA256 = '7b989cf3a076659d1e6b57acf447c8751626d5a6f071dbec2681da7767dcfa2b';
+const ADMIN_SEGMENT_SHA256 = 'cba119bc87d872acbdbeefacedc37bfb0b139b640fc9b804faf29d152787122f';
 
 /** Mémorise le segment validé pour construire les liens internes du panel. */
 @Injectable({ providedIn: 'root' })

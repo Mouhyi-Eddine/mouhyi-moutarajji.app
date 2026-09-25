@@ -6,6 +6,7 @@
  */
 import type { Agency, Education, Experience, SkillGroup } from '../src/app/models/portfolio.models';
 import { AGENCIES_EN, EDUCATION_EN, EXPERIENCES_EN, SKILL_GROUPS_EN } from './content-en.ts';
+import { AGENCIES_FR, EXPERIENCES_FR } from './content-fr.ts';
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
@@ -294,9 +295,9 @@ export const AGENCIES: Agency[] = [
   { id: 'rectorat-agency', name: "Rectorat de l'académie de Rennes", roleFr: 'Développeur fullstack', roleEn: 'Fullstack Developer', start: '2018-09', end: '2019-11', order: 1 },
 ];
 
-// Textes anglais relus : content-en.ts fait foi (les valeurs EN ci-dessus sont les versions d'origine).
-for (const e of EXPERIENCES) Object.assign(e, EXPERIENCES_EN[e.id]);
-for (const a of AGENCIES) Object.assign(a, AGENCIES_EN[a.id]);
+// Textes relus : content-en.ts et content-fr.ts font foi (les valeurs ci-dessus sont les versions d'origine).
+for (const e of EXPERIENCES) Object.assign(e, EXPERIENCES_EN[e.id], EXPERIENCES_FR[e.id]);
+for (const a of AGENCIES) Object.assign(a, AGENCIES_EN[a.id], AGENCIES_FR[a.id]);
 for (const d of EDUCATION) Object.assign(d, EDUCATION_EN[d.id]);
 for (const g of SKILL_GROUPS) {
   const en = SKILL_GROUPS_EN[g.id];
