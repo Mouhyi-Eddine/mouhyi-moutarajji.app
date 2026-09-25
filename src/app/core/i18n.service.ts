@@ -36,9 +36,10 @@ const STR: Record<Lang, Record<string, string>> = {
     'skip.link': 'Aller au contenu',
     'data.error': 'Le contenu détaillé est momentanément indisponible. Merci de réessayer dans quelques instants.',
     'cv.download': 'Télécharger le CV',
-    'cv.downloadLabel': 'Télécharger le CV au format PDF',
+    'cv.downloadLabel': "Télécharger le CV au format PDF (s'ouvre dans un nouvel onglet)",
     'cv.generating': 'Génération du PDF…',
     'cv.error': 'La génération du PDF a échoué. Merci de réessayer.',
+    'cv.blocked': "Le navigateur a bloqué l'ouverture du CV. Autorisez les fenêtres pop-up pour ce site, puis réessayez.",
     'cv.techStack': 'Environnement technique',
   },
   en: {
@@ -74,9 +75,10 @@ const STR: Record<Lang, Record<string, string>> = {
     'skip.link': 'Skip to content',
     'data.error': 'Some content is temporarily unavailable. Please try again in a moment.',
     'cv.download': 'Download CV (French)',
-    'cv.downloadLabel': 'Download my CV as a PDF (in French)',
+    'cv.downloadLabel': 'Download CV (French) as a PDF (opens in a new tab)',
     'cv.generating': 'Generating PDF…',
     'cv.error': "Couldn't generate the PDF. Please try again.",
+    'cv.blocked': 'Your browser blocked the CV from opening. Allow pop-ups for this site, then try again.',
   },
 };
 
