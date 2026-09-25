@@ -64,12 +64,21 @@ header.nav{position:fixed; top:0; left:0; right:0; z-index:50; padding-top:env(s
 .hero h1{font-size:clamp(2.1rem, 5vw, 3.3rem); line-height:1.08; max-width:15ch;}
 .hero p.lead{margin-top:22px; max-width:56ch; color:var(--ink-dim); font-size:1.08rem;}
 .hero .cta-row{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap;}
-.btn{font-family:'IBM Plex Sans', sans-serif; font-size:.92rem; font-weight:500; padding:12px 20px; border-radius:var(--radius);
+/* line-height explicite : un <button> n'hérite pas de celui de la page, contrairement aux liens <a>. */
+.btn{font-family:'IBM Plex Sans', sans-serif; font-size:.92rem; font-weight:500; line-height:1.6; padding:12px 20px; border-radius:var(--radius);
   border:1px solid var(--line); cursor:pointer; transition:border-color .15s, background .15s; display:inline-flex; align-items:center; gap:8px;}
 .btn-primary{background:var(--accent); color:#04141F; border-color:var(--accent);}
 .btn-primary:hover{background:#7ED0EC;}
 .btn-ghost{color:var(--ink); background:transparent;}
 .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+.btn:disabled{opacity:.6; cursor:progress;}
+.btn-icon{width:18px; height:18px; flex:none;}
+/* Bouton « Télécharger le CV » : contour accent pour se distinguer des autres boutons secondaires. */
+.cv-download{display:inline-flex; flex-direction:column; gap:6px;}
+.cv-download .btn-ghost{border-color:var(--accent); color:var(--accent);}
+.cv-download .btn-ghost:hover:not(:disabled){background:var(--accent-soft);}
+.cv-error{color:var(--amber); font-size:.8rem;}
+.contact-links .cv-download{margin-top:8px;}
 
 
 section{padding:88px 0; border-top:1px solid var(--line-soft);}

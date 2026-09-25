@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Meta } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdminAuthService } from '../admin-auth.service';
 import { AdminPath } from '../admin-path';
 
 @Component({
   selector: 'app-admin-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: '../admin.css',
   template: `
     <div class="panel" style="max-width:420px">
+      <a class="back-link" routerLink="/">← Retour au portfolio</a>
       <form class="card" [formGroup]="form" (ngSubmit)="submit()">
         <h2>Connexion</h2>
         <label>

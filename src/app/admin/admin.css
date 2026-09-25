@@ -4,6 +4,10 @@
 .panel-head{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:32px;}
 .panel-head h1{font-size:1.5rem;}
 .muted{color:var(--ink-dimmer); font-size:.85rem;}
+/* Retour au site public, toujours visible en tête des pages admin. */
+.back-link{display:inline-flex; align-items:center; gap:6px; margin-bottom:20px; padding:6px 0; font-size:.9rem; color:var(--accent);}
+.back-link:hover{text-decoration:underline;}
+a.btn-sm{display:inline-flex; align-items:center;}
 
 .tabs{display:flex; gap:8px; margin-bottom:28px; border-bottom:1px solid var(--line-soft);}
 .tabs button{background:none; border:none; border-bottom:2px solid transparent; color:var(--ink-dim); padding:10px 14px; cursor:pointer; font:inherit;}
